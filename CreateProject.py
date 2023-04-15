@@ -12,7 +12,7 @@ romDir = "D:/MagicLantern/ROMs/{}_{}".format(model, ver)
 device = devices[model]
 fw = device.firmwares[ver]
 
-newProgram = createNewProgram("testProgram", device.cpu.arch, device.cpu.lang, device.cpu.compiler)
+newProgram = createNewProgram("{}_{}".format(model, ver), device.cpu.arch, device.cpu.lang, device.cpu.compiler)
 
 map = createMemoryMap(device, ver)
 
