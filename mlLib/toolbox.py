@@ -46,12 +46,10 @@ def getFileBytes(path, name, program = None):
             return e
     
     # load new file from disk
-    id = program.startTransaction("Create new bytes {}".format(name))
     file = FSRL.fromString(path)
     fss = FileSystemService.getInstance()
     provider = fss.getByteProvider(file, False, monitor)
     file = provider.getFile()
     bytes = program.getMemory().createFileBytes(name, 0, file.length(), provider.getInputStream(0), monitor)
     print("created new bytes {}".format(name))
-    program.endTransaction(id, True)
     return bytes

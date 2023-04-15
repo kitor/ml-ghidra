@@ -82,7 +82,6 @@ def applyMemoryMap(memTable, romDir, program = None):
 
     mem = program.getMemory()
 
-    id = program.startTransaction("CreateMemMap")
     for r in memTable:
         rStart = stringToAddress(r.dst, program = program)
         print("Create region: 0x{:08x} {}".format(r.dst, r.name))
@@ -97,4 +96,3 @@ def applyMemoryMap(memTable, romDir, program = None):
 
         region.setComment(r.comment)
         setAttrs(region, r.acl)
-    program.endTransaction(id, True)

@@ -7,7 +7,7 @@ from cfg.memory import devices
 # TODO: GUI
 model = "77D"
 ver   = "1.1.0"
-romDir = "D:/MagicLantern/ROMs/{}_{}".format(model, ver)
+
 device = devices[model]
 fw = device.firmwares[ver]
 
