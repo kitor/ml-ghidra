@@ -30,8 +30,29 @@ def createNewProgram(name, arch, lang, compiler):
     compilerSpec =  language.getCompilerSpecByID( compilerSpecDesc.getCompilerSpecID())
 
     return createProgram(programName, language, compilerSpec)
+
+def getFileProvider(path, name):
+    from __main__ import monitor
+    from ghidra.formats.gfilesystem import FileSystemService
+    from ghidra.formats.gfilesystem import FSRL
     
-def getFileBytes(path, name, program = None):
+    path = "file://{}".format(path)
+    
+    # load new file from disk
+    f = FSRL.fromString(path)
+    fss = FileSystemService.getInstance()
+    provider = fss.getByteProvider(f, False, monitor)
+    return provider
+    
+def createFileBytes(name, provider, program=None):
+    from __main__ import monitor
+    f = provider.getFile()
+    bytes = program.getMemory().createFileBytes(name, 0, f.length(), provider.getInputStream(0), monitor)
+    print("created new bytes {}".format(name))
+    return bytes
+
+    
+def getFileBytes(name, program = None):
     from __main__ import monitor
     from ghidra.formats.gfilesystem import FileSystemService
     from ghidra.formats.gfilesystem import FSRL
@@ -44,12 +65,6 @@ def getFileBytes(path, name, program = None):
     for e in program.getMemory().getAllFileBytes():
         if e.getFilename() == name:
             return e
+            
+    return False
     
-    # load new file from disk
-    file = FSRL.fromString(path)
-    fss = FileSystemService.getInstance()
-    provider = fss.getByteProvider(file, False, monitor)
-    file = provider.getFile()
-    bytes = program.getMemory().createFileBytes(name, 0, file.length(), provider.getInputStream(0), monitor)
-    print("created new bytes {}".format(name))
-    return bytes

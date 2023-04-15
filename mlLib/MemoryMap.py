@@ -63,7 +63,7 @@ def createMemoryMap(device, ver):
     print(memTable)
     return memTable
 
-def applyMemoryMap(memTable, romDir, program = None):
+def applyMemoryMap(memTable, program = None):
     if not isinstance(memTable, MemTable):
         print("memTable is not MemTable object!")
         
@@ -89,8 +89,9 @@ def applyMemoryMap(memTable, romDir, program = None):
         #if isinstance(r, ByteMappedRegion):
         #    region = mem.createByteMappedBlock(r.name, rStart, stringToAddress(r.src, program=program), r.getSize(), r.overlay)
         if isinstance(r, RomRegion):
-            bytes = getFileBytes("file://{}/{}".format(romDir, r.file), r.file, program=program)
-            region = mem.createInitializedBlock(r.name, rStart, bytes, r.offset, r.getSize(), r.overlay)
+            fileBytes = getFileBytes(r.file, program=program)
+
+            region = mem.createInitializedBlock(r.name, rStart, fileBytes, r.offset, r.getSize(), r.overlay)
         elif isinstance(r, UninitializedRegion):
             region = mem.createUninitializedBlock(r.name, rStart, r.getSize(), r.overlay)
 

@@ -377,6 +377,9 @@ class RegionList(object):
         Make object iterable from a contained list
         """
         return iter(self._list)
+        
+    def __len__(self):
+        return len(self._list)
     
     @staticmethod
     def validateDict(obj, name):

@@ -117,7 +117,7 @@ devices = {
         firmwares = {
             "1.0.3" : Firmware(
                 roms = RegionList(
-                    RomRegion( name="ROM1", file="ROM1.bin", dst=0xfe000000, size=0x2000000 )   # 32MB
+                    RomRegion( name="ROM1", file="ROM1", dst=0xfe000000, size=0x2000000 )   # 32MB
                 ),
                 romcpy = RegionList(
                     ByteMappedRegion( src=0xff0050a8, dst=       0x0, size=    0x2bf8, name="ATCM"),
@@ -169,8 +169,8 @@ devices = {
         firmwares = {
             "1.1.0" : Firmware(
                 roms = RegionList(
-                    RomRegion( name="ROM0", file="ROM0.bin", dst=0xE0000000, size=0x2000000 ),  # 32MB
-                    RomRegion( name="ROM1", file="ROM1.bin", dst=0xF0000000, size=0x1000000 )   # 16MB
+                    RomRegion( name="ROM0", file="ROM0", dst=0xE0000000, size=0x2000000 ),  # 32MB
+                    RomRegion( name="ROM1", file="ROM1", dst=0xF0000000, size=0x1000000 )   # 16MB
                 ),
                 romcpy = RegionList(
                     ByteMappedRegion( src=0xe1189908, dst=    0x4000, size=   0x690c0, name="DryOS"),
@@ -219,7 +219,7 @@ devices = {
         firmwares = {
             "1.1.0" : Firmware(
                 roms = RegionList(
-                    RomRegion( name="ROM1", file="ROM1.bin", dst=0xfe000000, size=0x2000000 )   # 32MB
+                    RomRegion( name="ROM1", file="ROM1", dst=0xfe000000, size=0x2000000 )   # 32MB
                 ),
                 romcpy = RegionList(
                     ByteMappedRegion( src=0xfed58b7c, dst=       0x0, size=     0x3d4c, name= "ATCM" ),
