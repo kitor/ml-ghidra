@@ -84,11 +84,11 @@ def applyMemoryMap(memTable, romDir, program = None):
 
     id = program.startTransaction("CreateMemMap")
     for r in memTable:
-        rStart = stringToAddress(r.dst)
+        rStart = stringToAddress(r.dst, program = program)
         print("Create region: 0x{:08x} {}".format(r.dst, r.name))
         region = None
         #if isinstance(r, ByteMappedRegion):
-        #    region = mem.createByteMappedBlock(r.name, rStart, stringToAddress(r.src), r.getSize(), r.overlay)
+        #    region = mem.createByteMappedBlock(r.name, rStart, stringToAddress(r.src, program=program), r.getSize(), r.overlay)
         if isinstance(r, RomRegion):
             bytes = getFileBytes("file://{}/{}".format(romDir, r.file), r.file, program=program)
             region = mem.createInitializedBlock(r.name, rStart, bytes, r.offset, r.getSize(), r.overlay)
