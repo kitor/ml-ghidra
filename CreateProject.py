@@ -15,7 +15,7 @@ if not files or len(files) < len(fw.roms):
     # not all files loaded successfully, abort
     loadFilesError()
     exit(1)
-      
+
 memoryMap = createMemoryMap(device, fw)
 
 newProgram = createNewProgram("{}_{}".format(device.model, fw.version),
@@ -24,6 +24,6 @@ newProgram = createNewProgram("{}_{}".format(device.model, fw.version),
 # create file bytes in program
 for name, provider in files.items():
     createFileBytes(name, provider, program=newProgram)
-    
+
 # we need to explicitly pass new program downsteram as scripts are confused
 applyMemoryMap(memoryMap, program=newProgram)

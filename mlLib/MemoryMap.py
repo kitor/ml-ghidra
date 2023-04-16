@@ -6,7 +6,7 @@ from mlLib.MemTable import *
 
 
 def createMemoryMap(device, fw):
-    
+
     # First, init "target" memTable with general memory regions and RAM config
     memTable = MemTable()
     for region in device.cpu.regions:
@@ -65,11 +65,11 @@ def createMemoryMap(device, fw):
 def applyMemoryMap(memTable, program = None):
     if not isinstance(memTable, MemTable):
         print("memTable is not MemTable object!")
-        
+
     if program is None:
         from __main__ import currentProgram
         program = currentProgram
-       
+
     def setAttrs(mb, attr):
         if len(attr) < 4:
             attr.ljust(4)

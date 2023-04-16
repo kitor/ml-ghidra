@@ -1,27 +1,27 @@
 from mlLib.toolbox import *
 from pprint import pprint
 from copy import copy
- 
+
 class MemTable(object):
     """
     Representation of memory table
     """
-    
+
     CHECK_FINE = -1
     CHECK_FAIL = -2
-    
+
     def __init__(self):
         """
         Constructs MemTable object
         """
         self._table =  []
-        
+
     def __iter__(self):
         """
         Make object iterable from a contained list
         """
         return iter(self._table)
-        
+
     def __str__(self):
         """
         Implements string conversion. Renders ascii table representation of
@@ -47,7 +47,7 @@ class MemTable(object):
                         desc.ljust(28), e.name.ljust(30), e.comment)
         buf += "Total items: {}".format(len(self._table))
         buf += "\n"
-        
+
         return buf
 
     def _sort(self):
@@ -59,7 +59,7 @@ class MemTable(object):
     def _checkRegionFit(self, target):
         """
         Check if region fits into any existing region
-        
+
         :param target: Region class object to search
         :return:       ID if region fits another region
         :return:       MemTable.CHECK_FINE if region has no conflicts
@@ -69,10 +69,10 @@ class MemTable(object):
             # dismiss overlays
             if self._table[i].overlay:
                 continue
-            
+
             rDst = self._table[i].dst
             rEnd = self._table[i].end
-            
+
             if target.dst >= rDst and target.dst <= rEnd:
                 # target starts in this region
                 if target.end <= rEnd:
@@ -92,7 +92,7 @@ class MemTable(object):
             else:
                 # target starts above this region (skip)
                 continue
-        
+
         return MemTable.CHECK_FINE
 
     def addRegion(self, region):
@@ -113,7 +113,7 @@ class MemTable(object):
         """
         Inject region / split region into another region.
         Region to be injected must fit into a destination region.
-        
+
         :param region:   Region class object to inject
         :param sourceId: ID of destination region
         """
@@ -130,28 +130,28 @@ class MemTable(object):
                 # adjust file offset
                 e.offset = region.end - oldEntry.dst + oldEntry.offset + 1
             self.addRegion(e)
-        
-        if rStart != oldEntry.dst:    
+
+        if rStart != oldEntry.dst:
             # injected region is not at start
             # create "lower region"
             e = copy(oldEntry)
             # adjust end pointer
             e.end = rStart - 1;
             self.addRegion(e)
-        
+
         newRegion = None
         if isinstance(region, SubRegion):
             # request to create a subregion from existing region
-            
+
             # Keep all data from the original region, except those defined in SubRegion object
             newRegion = copy(oldEntry)
             newRegion.dst = region.dst
             newRegion.end = region.end
-            if region.name: 
+            if region.name:
                 newRegion.name = region.name
             if region.comment:
                 newRegion.comment = region.comment
-            
+
             # copy old ACL if not overwritten
             if region.acl:
                 newRegion.acl = region.acl
@@ -162,20 +162,20 @@ class MemTable(object):
 
         else:
             # inject new region
-            newRegion = copy(region)   
-        
+            newRegion = copy(region)
+
         #copy ACL
         if not newRegion.acl:
             newRegion.acl = oldEntry.acl
 
         self.addRegion(newRegion)
-       
+
     def merge(self, src):
         """
         Mege entries from src table into current object.
         Inject regions that overlap, add regions that have no counter-part.
-        
-        
+
+
         :param src: Table to fetch entries from.
         """
         for region in src:
@@ -183,7 +183,7 @@ class MemTable(object):
                 # overlays don't conflict with regular address space
                 self.addRegion(region)
                 continue
-                
+
             result = self._checkRegionFit(region)
             if result == MemTable.CHECK_FAIL:
                 print("merge: Region conflicts: {}".format(region.name))
@@ -209,7 +209,7 @@ class MemTable(object):
         src = self._table[result]
 
         rSrcOff  = region.src - src.dst + src.offset
-        
+
         region = copy(region)
         region.file = src.file
         region.offset = region.src - src.dst + src.offset
@@ -217,19 +217,19 @@ class MemTable(object):
         if region.overlay and not region.acl:
             # if no ACL was set, default to source region ACL.
             region.acl = src.acl
-            
+
         self.addRegion(region)
-       
+
     def clearRegion(self, region, name=""):
         """
         Replace region with uninitialized bytes
-        
+
         :param region: RomRegion object to add
         :param name:   New region name to append in comment.
         """
         if region.clear == False:
             return
-            
+
         result = self._checkRegionFit(DummyRegion(dst = region.src, size=region.getSize()))
         if result < 0:
             print("Source region not found: {} {}".format(name, region.name))
@@ -244,7 +244,7 @@ class MemTable(object):
     def splitSubregion(self, region):
         """
         Split region out of a bigger region
-        
+
         :param region: Region object to split out.
         """
         result = self._checkRegionFit(region)
@@ -254,7 +254,7 @@ class MemTable(object):
         pprint(result)
         print(region.name)
         self._makeSubregion(result, region)
-        
+
     def removeDummyRegions(self):
         """
         Remove all placeholder regions (DummyRegion objects)
@@ -313,10 +313,10 @@ class Region(object):
     def setSize(self, size):
         #self.size = size
         self.end = self.dst + size - 1
-        
+
     def getSize(self):
         return self.end - self.dst + 1
-    
+
 class RomRegion(Region):
     """
     Memory region loaded from a ROM file.
@@ -332,7 +332,7 @@ class UninitializedRegion(Region):
     """
     def __init__(self, **kwargs):
         super(UninitializedRegion, self).__init__(**kwargs)
-        
+
 class ByteMappedRegion(RomRegion):
     """
     Memory region byte mapped from another region
@@ -350,14 +350,14 @@ class DummyRegion(Region):
     """
     def __init__(self, **kwargs):
         super(DummyRegion, self).__init__(**kwargs)
-        
+
 class SubRegion(Region):
     """
     Memory region that describes a sub region of existing Region
     """
     def __init__(self, **kwargs):
         super(SubRegion, self).__init__(**kwargs)
-        
+
 
 
 
@@ -371,16 +371,16 @@ class RegionList(object):
 
         for region in regions:
             self._list.append(region)
-        
+
     def __iter__(self):
         """
         Make object iterable from a contained list
         """
         return iter(self._list)
-        
+
     def __len__(self):
         return len(self._list)
-    
+
     @staticmethod
     def validateDict(obj, name):
         if not isinstance(obj, dict):
@@ -389,7 +389,7 @@ class RegionList(object):
             exit(1)
         for name, region in obj.items():
             RegionList.validate(region, name)
-    
+
     @staticmethod
     def validate(obj, name):
         if not isinstance(obj, RegionList):
@@ -404,19 +404,19 @@ class CPU(object):
     """
     def __init__(self, arch, lang, compiler, regions):
         RegionList.validate(regions, "regions")
-        
+
         self.arch = arch
         self.lang = lang
         self.compiler = compiler
         self.regions = regions
-        
+
     @staticmethod
     def validate(obj, name):
         if not isinstance(obj, CPU):
             print("{} is not CPU, aborting!").format(name)
             pprint(obj)
             exit(1)
-            
+
 class Device(object):
     models = []
     """
@@ -435,13 +435,13 @@ class Device(object):
         self.memSize = memSize
         self.firmwares = firmwares
         Device.models.append(model)
-    
+
     def __str__(self):
         return self.model
 
     def __repr__(self):
         return self.model
-        
+
     def toString(self):
         return self.model
 
@@ -456,7 +456,7 @@ class Firmware(object):
         RegionList.validate(subregions, "subregions")
         RegionList.validateDict(blobs, "blobs")
         RegionList.validateDict(overlays, "overlays")
-        
+
         self.version = version
         self.roms = roms
         self.blobs = blobs
@@ -466,10 +466,10 @@ class Firmware(object):
 
     def __str__(self):
         return self.version
-        
+
     def __repr__(self):
         return self.version
-        
+
     @staticmethod
     def validateList(obj, name):
         versions = []
@@ -483,7 +483,7 @@ class Firmware(object):
                 print("Version already registered {}".format(version))
                 exit(1)
             versions.append(version)
-    
+
     @staticmethod
     def validate(firmware, name):
         if not isinstance(firmware, Firmware):

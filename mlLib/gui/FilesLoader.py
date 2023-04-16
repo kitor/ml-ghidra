@@ -32,7 +32,7 @@ def loadFile(title, rom, size):
 
     return (f, msg)
 
-   
+
 def loadFiles(device, fw):
     files = {}
     for rom in fw.roms:
