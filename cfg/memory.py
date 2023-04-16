@@ -110,12 +110,14 @@ cpus = {
 }
 
 
-devices = {
-    "80D" : Device(
+devices = [
+    Device(
+        model = "80D",
         cpu = cpus["DIGIC6"],
         memSize = 0x40000000,   # 1GB
-        firmwares = {
-            "1.0.3" : Firmware(
+        firmwares = [
+            Firmware(
+                version = "1.0.3",
                 roms = RegionList(
                     RomRegion( name="ROM1", file="ROM1", dst=0xfe000000, size=0x2000000 )   # 32MB
                 ),
@@ -161,13 +163,15 @@ devices = {
                     )
                 }
             ),
-        }
+        ]
     ),
-    "77D" : Device(
+    Device(
+        model = "77D",
         cpu = cpus["DIGIC7"],
         memSize = 0x40000000,   # 1GB
-        firmwares = {
-            "1.1.0" : Firmware(
+        firmwares = [
+            Firmware(
+                version = "1.1.0",
                 roms = RegionList(
                     RomRegion( name="ROM0", file="ROM0", dst=0xE0000000, size=0x2000000 ),  # 32MB
                     RomRegion( name="ROM1", file="ROM1", dst=0xF0000000, size=0x1000000 )   # 16MB
@@ -211,13 +215,15 @@ devices = {
                     )
                 }
             ),
-        }
+        ]
     ),
-    "750D" : Device(
+    Device(
+        model = "750D",
         cpu = cpus["DIGIC6"],
         memSize = 0x20000000,   # 512MB
-        firmwares = {
-            "1.1.0" : Firmware(
+        firmwares = [ 
+            Firmware(
+                version = "1.1.0",
                 roms = RegionList(
                     RomRegion( name="ROM1", file="ROM1", dst=0xfe000000, size=0x2000000 )   # 32MB
                 ),
@@ -253,6 +259,6 @@ devices = {
                     )
                 }
             )
-        }
+        ]
     )
-}
+]

@@ -1,68 +1,49 @@
+import java.io
+from __main__ import askYesNo, askFile
 from mlLib.toolbox import getFileProvider
 
 def loadFilesError():
     from docking.widgets import OptionDialogBuilder
     title = "ROM files load error"
     msg = "One or more files failed to load. Unable to continue"
-    dialog = OptionDialogBuilder(title, msg)
-    dialog.show()
+    OptionDialogBuilder(title, msg).show()
 
-    
-def askFileError(name, reason):
-    from docking.widgets import OptionDialogBuilder
+
+def askOnLoadError(name, reason):
     title = "Load failed: {}".format(name)
     msg = "Unable to load file {} due to a following reason:\n{}\nRetry?".format(name,reason)
-    dialog = OptionDialogBuilder(title, msg)
-    dialog.addOption("Retry")
-    dialog.addOption("Abort")
-    val = dialog.show()
-    if val == 1:
-        return True
+    return askYesNo(title, msg)
 
-    return False
-    
-def loadFile(rom):
-    from java.awt import KeyboardFocusManager
-    import java.io
-    from docking.widgets.filechooser import GhidraFileChooser
 
-    kfm = KeyboardFocusManager.getCurrentKeyboardFocusManager()
-    window = kfm.getActiveWindow()
-    
-    name = rom.name
-    size = rom.getSize()
-    msg = ""
-    
-    fc = GhidraFileChooser(window)
-    fc.setTitle(name)
-    f = fc.getSelectedFile()
-    
-    if isinstance(f, java.io.File):
-        if f.length() != size:
-            msg = "Size doesn't match: Expected 0x{:08x}, got 0x{:08x}".format(
-                    size, f.length())
-            print msg
-            return (False, msg)
-        return (f, msg)
+def loadFile(title, rom, size):
+    msg = "OK"
+    f = None
+    try:
+        f = askFile(title,"Select")
+    except:
+        msg = "File selection cancelled."
+        return (False, msg)
 
-    msg = "Not a file."
-    print msg
-    return (False, msg)
-        
-def loadFiles(roms):
+    if f.length() != size:
+        msg = "Size doesn't match: Expected 0x{:08x}, got 0x{:08x}".format(
+                size, f.length())
+        print msg
+        return (False, msg)
+
+    return (f, msg)
+
+   
+def loadFiles(device, fw):
     files = {}
-    for rom in roms:
-        f, message = loadFile(rom)
-        print(message)
+    for rom in fw.roms:
+        size = rom.getSize()
+        title = "{}_{}: {} (expected size: 0x{:08x})".format(device.model, fw.version, rom.name, size)
+
+        f = None
         while not f:
-            if askFileError(rom.name, message):
-                f, message = loadFile(rom)
-                print(message)
-            else:
+            f, message = loadFile(title, rom, size)
+            if not f and not askOnLoadError(rom.name, message):
                 return
+        files[rom.name] = getFileProvider(f.getAbsolutePath(), rom.name)
 
-        provider = getFileProvider(f.getAbsolutePath(), rom.name)
-
-        files[rom.name] = provider
-            
     return files

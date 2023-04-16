@@ -1,27 +1,25 @@
 # Creates a project for EOS ROM analysis
 # @category MagicLantern
 
-from mlLib.toolbox import createNewProgram, createFileBytes
 from mlLib.MemoryMap import *
+from mlLib.toolbox import createNewProgram, createFileBytes
+from mlLib.gui.FilesLoader import loadFiles, loadFilesError
+from mlLib.gui.FirmwareSelector import selectFirmware
+
 from cfg.memory import devices
 
-# TODO: GUI
-model = "77D"
-ver   = "1.1.0"
+device, fw = selectFirmware(devices)
 
-device = devices[model]
-fw = device.firmwares[ver]
-
-from mlLib.gui.FilesLoader import loadFiles, loadFilesError
-files = loadFiles(fw.roms)
+files = loadFiles(device, fw)
 if not files or len(files) < len(fw.roms):
     # not all files loaded successfully, abort
     loadFilesError()
     exit(1)
       
-memoryMap = createMemoryMap(device, ver)
+memoryMap = createMemoryMap(device, fw)
 
-newProgram = createNewProgram("{}_{}".format(model, ver), device.cpu.arch, device.cpu.lang, device.cpu.compiler)
+newProgram = createNewProgram("{}_{}".format(device.model, fw.version),
+        device.cpu.arch, device.cpu.lang, device.cpu.compiler)
 
 # create file bytes in program
 for name, provider in files.items():

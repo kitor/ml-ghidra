@@ -418,23 +418,38 @@ class CPU(object):
             exit(1)
             
 class Device(object):
+    models = []
     """
     Describes a single device
     """
-    def __init__(self, cpu, memSize, firmwares = {}):
+    def __init__(self, model, cpu, memSize, firmwares = {}):
         # validate types
-        Firmware.validateDict(firmwares, "firmware")
+        if model in Device.models:
+            raise Exception("Model already registered {}".format(model))
+
+        Firmware.validateList(firmwares, "firmware")
         CPU.validate(cpu, "cpu")
 
+        self.model = model
         self.cpu = cpu
         self.memSize = memSize
         self.firmwares = firmwares
+        Device.models.append(model)
+    
+    def __str__(self):
+        return self.model
+
+    def __repr__(self):
+        return self.model
         
+    def toString(self):
+        return self.model
+
 class Firmware(object):
     """
     Description of a single firmware version
     """
-    def __init__(self, roms, romcpy = RegionList(), subregions = RegionList(), blobs = {}, overlays = {} ):
+    def __init__(self, version, roms, romcpy = RegionList(), subregions = RegionList(), blobs = {}, overlays = {} ):
         # validate types
         RegionList.validate(roms, "roms")
         RegionList.validate(romcpy, "romcpy")
@@ -442,24 +457,37 @@ class Firmware(object):
         RegionList.validateDict(blobs, "blobs")
         RegionList.validateDict(overlays, "overlays")
         
+        self.version = version
         self.roms = roms
         self.blobs = blobs
         self.romcpy = romcpy
         self.overlays = overlays
         self.subregions = subregions
-    
+
+    def __str__(self):
+        return self.version
+        
+    def __repr__(self):
+        return self.version
+        
     @staticmethod
-    def validateDict(obj, name):
-        if not isinstance(obj, dict):
-            print("{} is not Firmware, aborting!").format(name)
+    def validateList(obj, name):
+        versions = []
+        if not isinstance(obj, list):
+            print("{} is not a list, aborting!").format(name)
             pprint(obj)
             exit(1)
-        for name, firmware in obj.items():
-            Firmware.validate(firmware, name)
+        for firmware in obj:
+            version = Firmware.validate(firmware, name)
+            if version in versions:
+                print("Version already registered {}".format(version))
+                exit(1)
+            versions.append(version)
     
     @staticmethod
-    def validate(obj, name):
-        if not isinstance(obj, Firmware):
+    def validate(firmware, name):
+        if not isinstance(firmware, Firmware):
             print("{} is not Firmware, aborting!").format(name)
-            pprint(obj)
+            pprint(firmware)
             exit(1)
+        return firmware.version

@@ -5,8 +5,7 @@ from mlLib.toolbox import *
 from mlLib.MemTable import *
 
 
-def createMemoryMap(device, ver):
-    fw = device.firmwares[ver]
+def createMemoryMap(device, fw):
     
     # First, init "target" memTable with general memory regions and RAM config
     memTable = MemTable()
