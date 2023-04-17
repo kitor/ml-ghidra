@@ -60,14 +60,14 @@ cpus = {
             UninitializedRegion( dst=    0x1000, size=    0x1000, acl="rwx-", name="CPU1 PRIV" ),
                     DummyRegion( dst=    0x2000, size=0x3FFFE000, acl="rwx-", name="RAM CACHED"),
                     DummyRegion( dst=0x40000000, size=0x80000000, acl="rwx-", name="RAM UNCACHED"),
-            UninitializedRegion( dst=0xC0000000, size= 0x2000000, acl="rw-v", name="MMIO 0xC0000000" ),
-            UninitializedRegion( dst=0xC4000000, size= 0x1000000, acl="rw-v", name="MMIO 0xC4000000" ),
-            UninitializedRegion( dst=0xC8000000, size= 0x2000000, acl="rw-v", name="MMIO 0xC8000000" ),
-            UninitializedRegion( dst=0xD0000000, size= 0x1000000, acl="rw-v", name="MMIO 0xD0000000" ),
-            UninitializedRegion( dst=0xD2000000, size= 0x1000000, acl="rw-v", name="MMIO 0xD2000000" ),
-            UninitializedRegion( dst=0xD4000000, size= 0x2000000, acl="rw-v", name="MMIO 0xD4000000" ),
-            UninitializedRegion( dst=0xD8000000, size= 0x2000000, acl="rw-v", name="MMIO 0xD8000000" ),
-            UninitializedRegion( dst=0xDE000000, size= 0x1000000, acl="rw-v", name="MMIO 0xDE000000" ),
+            UninitializedRegion( dst=0xC0000000, size= 0x2000000, acl="rw-v", module="MMIO", name="MMIO 0xC0000000" ),
+            UninitializedRegion( dst=0xC4000000, size= 0x1000000, acl="rw-v", module="MMIO", name="MMIO 0xC4000000" ),
+            UninitializedRegion( dst=0xC8000000, size= 0x2000000, acl="rw-v", module="MMIO", name="MMIO 0xC8000000" ),
+            UninitializedRegion( dst=0xD0000000, size= 0x1000000, acl="rw-v", module="MMIO", name="MMIO 0xD0000000" ),
+            UninitializedRegion( dst=0xD2000000, size= 0x1000000, acl="rw-v", module="MMIO", name="MMIO 0xD2000000" ),
+            UninitializedRegion( dst=0xD4000000, size= 0x2000000, acl="rw-v", module="MMIO", name="MMIO 0xD4000000" ),
+            UninitializedRegion( dst=0xD8000000, size= 0x2000000, acl="rw-v", module="MMIO", name="MMIO 0xD8000000" ),
+            UninitializedRegion( dst=0xDE000000, size= 0x1000000, acl="rw-v", module="MMIO", name="MMIO 0xDE000000" ),
             UninitializedRegion( dst=0xDF000000, size= 0x1000000, acl="rwx-", name="TCM" ),
                     DummyRegion( dst=0xE0000000, size= 0x8000000, acl="r-x-", name="ROM0"),
                     DummyRegion( dst=0xE8000000, size= 0x8000000, acl="r---", name="?" ),
@@ -91,15 +91,15 @@ cpus = {
             UninitializedRegion( dst=    0x1000, size=    0x1000, acl="rwx-", name="CPU1 PRIV" ),
                     DummyRegion( dst=    0x2000, size=0x3FFFE000, acl="rwx-", name="RAM CACHED"),
                     DummyRegion( dst=0x40000000, size=0x80000000, acl="rwx-", name="RAM UNCACHED"),
-            UninitializedRegion( dst=0xC0000000, size= 0x3000000, acl="rw-v", name="MMIO 0xC0000000" ),
-            UninitializedRegion( dst=0xC4000000, size= 0x1000000, acl="rw-v", name="MMIO 0xC4000000" ),
-            UninitializedRegion( dst=0xC8000000, size= 0x2000000, acl="rw-v", name="MMIO 0xC8000000" ),
-            UninitializedRegion( dst=0xCC000000, size= 0x2000000, acl="rw-v", name="MMIO 0xCC000000" ),
-            UninitializedRegion( dst=0xD0000000, size= 0x1000000, acl="rw-v", name="MMIO 0xD0000000" ),
-            UninitializedRegion( dst=0xD2000000, size= 0x1000000, acl="rw-v", name="MMIO 0xD2000000" ),
-            UninitializedRegion( dst=0xD4000000, size= 0x2000000, acl="rw-v", name="MMIO 0xD4000000" ),
-            UninitializedRegion( dst=0xD7000000, size= 0x3000000, acl="rw-v", name="MMIO 0xD7000000" ),
-            UninitializedRegion( dst=0xDE000000, size= 0x1000000, acl="rw-v", name="MMIO 0xDE000000" ),
+            UninitializedRegion( dst=0xC0000000, size= 0x3000000, acl="rw-v", module="MMIO", name="MMIO 0xC0000000" ),
+            UninitializedRegion( dst=0xC4000000, size= 0x1000000, acl="rw-v", module="MMIO", name="MMIO 0xC4000000" ),
+            UninitializedRegion( dst=0xC8000000, size= 0x2000000, acl="rw-v", module="MMIO", name="MMIO 0xC8000000" ),
+            UninitializedRegion( dst=0xCC000000, size= 0x2000000, acl="rw-v", module="MMIO", name="MMIO 0xCC000000" ),
+            UninitializedRegion( dst=0xD0000000, size= 0x1000000, acl="rw-v", module="MMIO", name="MMIO 0xD0000000" ),
+            UninitializedRegion( dst=0xD2000000, size= 0x1000000, acl="rw-v", module="MMIO", name="MMIO 0xD2000000" ),
+            UninitializedRegion( dst=0xD4000000, size= 0x2000000, acl="rw-v", module="MMIO", name="MMIO 0xD4000000" ),
+            UninitializedRegion( dst=0xD7000000, size= 0x3000000, acl="rw-v", module="MMIO", name="MMIO 0xD7000000" ),
+            UninitializedRegion( dst=0xDE000000, size= 0x1000000, acl="rw-v", module="MMIO", name="MMIO 0xDE000000" ),
             UninitializedRegion( dst=0xDF000000, size= 0x1000000, acl="rwx-", name="TCM" ),
                     DummyRegion( dst=0xE0000000, size= 0x8000000, acl="r-x-", name="ROM0"),
                     DummyRegion( dst=0xE8000000, size= 0x8000000, acl="r---", name="?" ),
@@ -119,47 +119,47 @@ devices = [
             Firmware(
                 version = "1.0.3",
                 roms = RegionList(
-                    RomRegion( name="ROM1", file="ROM1", dst=0xfe000000, size=0x2000000 )   # 32MB
+                    RomRegion( name="ROM1", file="ROM1", dst=0xfe000000, size=0x2000000, module="DryOS" )   # 32MB
                 ),
                 romcpy = RegionList(
-                    ByteMappedRegion( src=0xff0050a8, dst=       0x0, size=    0x2bf8, name="ATCM"),
-                    ByteMappedRegion( src=0xff011950, dst=    0x4000, size=   0x15f14, name="DryOS"),
-                    ByteMappedRegion( src=0xff007ca0, dst=0x80000800, size=    0x9cb0, name="BTCM"),
-                    ByteMappedRegion( src=0xfe000000, dst=0xfc000000, size=      0x48, name="Boot", comment="just the code that jumps into 0xFE...")
+                    ByteMappedRegion( src=0xff0050a8, dst=       0x0, size=    0x2bf8, module="DryOS", name="ATCM"),
+                    ByteMappedRegion( src=0xff011950, dst=    0x4000, size=   0x15f14, module="DryOS", name="kernel"),
+                    ByteMappedRegion( src=0xff007ca0, dst=0x80000800, size=    0x9cb0, module="DryOS", name="BTCM"),
+                    ByteMappedRegion( src=0xfe000000, dst=0xfc000000, size=      0x48, module="Bootloader", name="EarlyBoot", comment="just the code that jumps into 0xFE...")
                 ),
                 subregions = RegionList(
-                    SubRegion( dst=0xff260000, size= 0x40000, acl="r---", name="Ring",    comment="via RomRead_task / SaveRingToFile" ),
-                    SubRegion( dst=0xff2a0000, size= 0x40000, acl="r---", name="Custom",  comment="via RomRead_task / SaveCustomToFile" ),
-                    SubRegion( dst=0xff2e0000, size= 0xc0000, acl="r---", name="Rasen",   comment="via RomRead_task / SaveRasenToFile" ),
-                    SubRegion( dst=0xff3a0000, size= 0x60000, acl="r---", name="Lens",    comment="via RomRead_task / SaveLensToFile" ),
-                    SubRegion( dst=0xff400000, size= 0x20000, acl="r---", name="Lens2",   comment="via RomRead_task / string LENS_DATA2_ADDR" ),
-                    SubRegion( dst=0xff420000, size= 0x20000, acl="r---", name="CigData", comment="via startupPrepareDevelop / string CIG_DATA_ADDR" ),
-                    SubRegion( dst=0xff460000, size=0x160000, acl="r---", name="Fix",     comment="via RomRead_task" ),
-                    SubRegion( dst=0xff820000, size=     0x8, acl="r---", name="GUI",     comment="via startupPreparePlayback / after string pHeapAddressForWinSys" ),
-                    SubRegion( dst=0xfff60000, size= 0x40000, acl="r---", name="Debug",   comment="via ReadDebugDataFromFROM"),
-                    #SubRegion( dst=0xfffa0000, size=     0x8, acl="r---", name="Unknown", comment="via dcsChangeAckCBR?"),
-                    SubRegion( dst=0xfffe0000, size= 0x20000, acl="r---", name="PROPAD",  comment="via PROPAD_Initialize params")
+                    SubRegion( dst=0xff260000, size= 0x40000, acl="r---", module="DryOS/Data", name="Ring",    comment="via RomRead_task / SaveRingToFile" ),
+                    SubRegion( dst=0xff2a0000, size= 0x40000, acl="r---", module="DryOS/Data", name="Custom",  comment="via RomRead_task / SaveCustomToFile" ),
+                    SubRegion( dst=0xff2e0000, size= 0xc0000, acl="r---", module="DryOS/Data", name="Rasen",   comment="via RomRead_task / SaveRasenToFile" ),
+                    SubRegion( dst=0xff3a0000, size= 0x60000, acl="r---", module="DryOS/Data", name="Lens",    comment="via RomRead_task / SaveLensToFile" ),
+                    SubRegion( dst=0xff400000, size= 0x20000, acl="r---", module="DryOS/Data", name="Lens2",   comment="via RomRead_task / string LENS_DATA2_ADDR" ),
+                    SubRegion( dst=0xff420000, size= 0x20000, acl="r---", module="DryOS/Data", name="CigData", comment="via startupPrepareDevelop / string CIG_DATA_ADDR" ),
+                    SubRegion( dst=0xff460000, size=0x160000, acl="r---", module="DryOS/Data", name="Fix",     comment="via RomRead_task" ),
+                    SubRegion( dst=0xff820000, size=     0x8, acl="r---", module="DryOS/Data", name="GUI",     comment="via startupPreparePlayback / after string pHeapAddressForWinSys" ),
+                    SubRegion( dst=0xfff60000, size= 0x40000, acl="r---", module="DryOS/Data", name="Debug",   comment="via ReadDebugDataFromFROM"),
+                    #SubRegion( dst=0xfffa0000, size=     0x8, acl="r---", module="DryOS/Data", name="Unknown", comment="via dcsChangeAckCBR?"),
+                    SubRegion( dst=0xfffe0000, size= 0x20000, acl="r---", module="DryOS/Data", name="PROPAD",  comment="via PROPAD_Initialize params")
                 ),
                 blobs = {
                     "OMAR": RegionList(
                         # See 0xfe0dbc7c OmarLoader()
-                        ByteMappedRegion( src=0xfe89b274, dst= 0x01ac0000, size=    0xade8 ),
-                        ByteMappedRegion( src=0xfe8a6064, dst= 0x01ae0000, size=  0x2898f0 ),
-                        ByteMappedRegion( src=0xfe88890c, dst= 0xdff00000, size=    0x4700 ),
-                        ByteMappedRegion( src=0xfe88d014, dst= 0xdff40800, size=    0xe258 )
+                        ByteMappedRegion( src=0xfe89b274, dst= 0x01ac0000, size=    0xade8, module="Blobs/OMAR" ),
+                        ByteMappedRegion( src=0xfe8a6064, dst= 0x01ae0000, size=  0x2898f0, module="Blobs/OMAR" ),
+                        ByteMappedRegion( src=0xfe88890c, dst= 0xdff00000, size=    0x4700, module="Blobs/OMAR" ),
+                        ByteMappedRegion( src=0xfe88d014, dst= 0xdff40800, size=    0xe258, module="Blobs/OMAR" )
                     ),
                     "ZICO": RegionList(
                         # See 0xfe0f51d4 ZicoKick()
-                        ByteMappedRegion( src=0xfeb9e5f4, dst= 0x82000000, size=  0x116628 ),
-                        ByteMappedRegion( src=0xfeb99b1c, dst= 0xbff00000, size=    0x4ad0 ),
-                        ByteMappedRegion( src=0xfeb92094, dst= 0xbff20000, size=    0x7a80 )
+                        ByteMappedRegion( src=0xfeb9e5f4, dst= 0x82000000, size=  0x116628, module="Blobs/ZICO" ),
+                        ByteMappedRegion( src=0xfeb99b1c, dst= 0xbff00000, size=    0x4ad0, module="Blobs/ZICO" ),
+                        ByteMappedRegion( src=0xfeb92094, dst= 0xbff20000, size=    0x7a80, module="Blobs/ZICO" )
                     )
                 },
                 overlays = {
                     "boot1": RegionList(
                         # RAM code for the 1st stage bootloader
-                        ByteMappedRegion( src=0xfe020000, dst=       0x0, size=       0x40, acl="rwx-", name="reset_vector", overlay=True, clear=False),
-                        ByteMappedRegion( src=0xfe0259b4, dst=0x40100000, size=     0xc890, acl="rwx-", name="FROMUTIL", overlay=True)
+                        ByteMappedRegion( src=0xfe020000, dst=       0x0, size=       0x40, acl="rwx-", module="Bootloader", name="reset_vector", overlay=True, clear=False),
+                        ByteMappedRegion( src=0xfe0259b4, dst=0x40100000, size=     0xc890, acl="rwx-", module="Bootloader", name="FROMUTIL", overlay=True)
                     )
                 }
             ),
@@ -173,45 +173,45 @@ devices = [
             Firmware(
                 version = "1.1.0",
                 roms = RegionList(
-                    RomRegion( name="ROM0", file="ROM0", dst=0xE0000000, size=0x2000000 ),  # 32MB
-                    RomRegion( name="ROM1", file="ROM1", dst=0xF0000000, size=0x1000000 )   # 16MB
+                    RomRegion( name="ROM0", file="ROM0", dst=0xE0000000, size=0x2000000, module="DryOS" ),  # 32MB
+                    RomRegion( name="ROM1", file="ROM1", dst=0xF0000000, size=0x1000000, module="DryOS/Resources" )   # 16MB
                 ),
                 romcpy = RegionList(
-                    ByteMappedRegion( src=0xe1189908, dst=    0x4000, size=   0x690c0, name="DryOS"),
-                    ByteMappedRegion( src=0xe11f29c8, dst=0xdf002800, size=    0xce14, name="TCM")
+                    ByteMappedRegion( src=0xe1189908, dst=    0x4000, size=   0x690c0, module="DryOS", name="ram_code"),
+                    ByteMappedRegion( src=0xe11f29c8, dst=0xdf002800, size=    0xce14, module="DryOS", name="TCM")
                 ),
                 subregions = RegionList(
                     # bootable ends at 0xe1800000
-                    SubRegion( dst=0xe1dc0000, size=   0x40000, acl="r---", name="Ring",   comment="via SaveRingToFile" ),
-                    SubRegion( dst=0xe1e00000, size=   0x40000, acl="r---", name="Custom", comment="via SaveCustomToFile" ),
-                    SubRegion( dst=0xe1e40000, size=   0xc0000, acl="r---", name="Rasen",  comment="via SaveRasenToFile" ),
-                    SubRegion( dst=0xe1f00000, size=   0x20000, acl="r---", name="Lens",   comment="via SaveLensToFile" ),
-                    SubRegion( dst=0xe1f20000, size=   0x20000, acl="r---", name="LENS2",  comment="via SaveLens2ToFile" ),
-                    SubRegion( dst=0xe1f60000, size=   0x10000, acl="r---", name="ppp",    comment="via SavePPPToFile" ),
-                    SubRegion( dst=0xe1f70000, size=   0x80000, acl="r---", name="Debug",  comment="via ReadDebugDataFromFROM" ),
-                    SubRegion( dst=0xf0010000, size=  0x820000, acl="r---", name="GUI",    comment="via SaveGUIToFile" ),
-                    SubRegion( dst=0xf0890000, size=  0x320000, acl="r---", name="Tune",   comment="via SaveTuneToFile" ),
-                    SubRegion( dst=0xf0bb0000, size=  0x320000, acl="r---", name="Tun2",   comment="via SaveTune2ToFile")
+                    SubRegion( dst=0xe1dc0000, size=   0x40000, acl="r---", module="DryOS/Resources", name="Ring",   comment="via SaveRingToFile" ),
+                    SubRegion( dst=0xe1e00000, size=   0x40000, acl="r---", module="DryOS/Resources", name="Custom", comment="via SaveCustomToFile" ),
+                    SubRegion( dst=0xe1e40000, size=   0xc0000, acl="r---", module="DryOS/Resources", name="Rasen",  comment="via SaveRasenToFile" ),
+                    SubRegion( dst=0xe1f00000, size=   0x20000, acl="r---", module="DryOS/Resources", name="Lens",   comment="via SaveLensToFile" ),
+                    SubRegion( dst=0xe1f20000, size=   0x20000, acl="r---", module="DryOS/Resources", name="LENS2",  comment="via SaveLens2ToFile" ),
+                    SubRegion( dst=0xe1f60000, size=   0x10000, acl="r---", module="DryOS/Resources", name="ppp",    comment="via SavePPPToFile" ),
+                    SubRegion( dst=0xe1f70000, size=   0x80000, acl="r---", module="DryOS/Resources", name="Debug",  comment="via ReadDebugDataFromFROM" ),
+                    SubRegion( dst=0xf0010000, size=  0x820000, acl="r---", module="DryOS/Resources", name="GUI",    comment="via SaveGUIToFile" ),
+                    SubRegion( dst=0xf0890000, size=  0x320000, acl="r---", module="DryOS/Resources", name="Tune",   comment="via SaveTuneToFile" ),
+                    SubRegion( dst=0xf0bb0000, size=  0x320000, acl="r---", module="DryOS/Resources", name="Tun2",   comment="via SaveTune2ToFile")
                 ),
                 blobs = {
                     "ZICO": RegionList(
                         # See e0065d42, calls ZicoKick(
-                        ByteMappedRegion( src=0xe0aebe94, dst=0x82000000 , size=  0xf0d80 ),
-                        ByteMappedRegion( src=0xe0ae7c2c, dst=0xbff00000 , size=   0x4260 ),
-                        ByteMappedRegion( src=0xe0ae2d0c, dst=0xbff20000 , size=   0x4f18 )
+                        ByteMappedRegion( src=0xe0aebe94, dst=0x82000000 , size=  0xf0d80, module="Blobs/ZICO"  ),
+                        ByteMappedRegion( src=0xe0ae7c2c, dst=0xbff00000 , size=   0x4260, module="Blobs/ZICO"  ),
+                        ByteMappedRegion( src=0xe0ae2d0c, dst=0xbff20000 , size=   0x4f18, module="Blobs/ZICO"  )
                     ),
                     "LIME": RegionList(
                         # See e00af84c, via 'Async LimeLoader' string
-                        ByteMappedRegion( src=0xe0e26d5c, dst= 0x1a00000, size=   0xa30a8 ),
-                        ByteMappedRegion( src=0xe0cbc688, dst= 0x1d00000, size=  0x16a6d0 )
+                        ByteMappedRegion( src=0xe0e26d5c, dst= 0x1a00000, size=   0xa30a8, module="Blobs/LIME"  ),
+                        ByteMappedRegion( src=0xe0cbc688, dst= 0x1d00000, size=  0x16a6d0, module="Blobs/LIME"  )
                     )
                 },
                 overlays = {
                     "boot1": RegionList(
                         # RAM code for the 1st stage bootloader
-                        ByteMappedRegion( src=0xe00079C0, dst=0xdf000000, size=     0x100, acl="rwx-", name="boot1", overlay=True, clear=True),
-                        ByteMappedRegion( src=0xe0007764, dst=0xdf020000, size=     0x25C, acl="rwx-", name="boot1", overlay=True, clear=True),
-                        ByteMappedRegion( src=0xe0010000, dst=0x40100000, size=    0x8E0C, acl="rwx-", name="FROMUTIL", overlay=True)
+                        ByteMappedRegion( src=0xe00079C0, dst=0xdf000000, size=     0x100, acl="rwx-", module="Bootloader", name="boot1", overlay=True, clear=True),
+                        ByteMappedRegion( src=0xe0007764, dst=0xdf020000, size=     0x25C, acl="rwx-", module="Bootloader", name="boot1", overlay=True, clear=True),
+                        ByteMappedRegion( src=0xe0010000, dst=0x40100000, size=    0x8E0C, acl="rwx-", module="Bootloader", name="FROMUTIL", overlay=True)
                     )
                 }
             ),
@@ -225,13 +225,13 @@ devices = [
             Firmware(
                 version = "1.1.0",
                 roms = RegionList(
-                    RomRegion( name="ROM1", file="ROM1", dst=0xfe000000, size=0x2000000 )   # 32MB
+                    RomRegion( name="ROM1", file="ROM1", dst=0xfe000000, size=0x2000000, module="DryOS" )   # 32MB
                 ),
                 romcpy = RegionList(
-                    ByteMappedRegion( src=0xfed58b7c, dst=       0x0, size=     0x3d4c, name= "ATCM" ),
-                    ByteMappedRegion( src=0xfed652e8, dst=    0x4000, size=    0x363a0, name= "DryOS"),
-                    ByteMappedRegion( src=0xfed5c8c8, dst=0x80000800, size=     0x8a20, name= "BTCM" ),
-                    ByteMappedRegion( src=0xfe000000, dst=0xfc000000, size=       0x48, name= "Boot", comment="just the code that jumps into 0xFE...")
+                    ByteMappedRegion( src=0xfed58b7c, dst=       0x0, size=     0x3d4c, module="DryOS", name= "ATCM" ),
+                    ByteMappedRegion( src=0xfed652e8, dst=    0x4000, size=    0x363a0, module="DryOS", name= "kernel"),
+                    ByteMappedRegion( src=0xfed5c8c8, dst=0x80000800, size=     0x8a20, module="DryOS", name= "BTCM" ),
+                    ByteMappedRegion( src=0xfe000000, dst=0xfc000000, size=       0x48, module="Bootloader", name="EarlyBoot", comment="just the code that jumps into 0xFE...")
                 ),
                 subregions = RegionList(
                     # TODO: fill
@@ -239,23 +239,23 @@ devices = [
                 blobs = {
                     "OMAR": RegionList(
                         # See 0xfe0d8374 OmarLoader()
-                        ByteMappedRegion( src=0xfe757300, dst=0x01ac0000, size=     0xb060 ),
-                        ByteMappedRegion( src=0xfe762368, dst=0x01ae0000, size=   0x2a41c0 ),
-                        ByteMappedRegion( src=0xfe744d60, dst=0xdff00000, size=     0x2e78 ),
-                        ByteMappedRegion( src=0xfe747be0, dst=0xdff40800, size=     0xf718 )
+                        ByteMappedRegion( src=0xfe757300, dst=0x01ac0000, size=     0xb060, module="Blobs/OMAR" ),
+                        ByteMappedRegion( src=0xfe762368, dst=0x01ae0000, size=   0x2a41c0, module="Blobs/OMAR" ),
+                        ByteMappedRegion( src=0xfe744d60, dst=0xdff00000, size=     0x2e78, module="Blobs/OMAR" ),
+                        ByteMappedRegion( src=0xfe747be0, dst=0xdff40800, size=     0xf718, module="Blobs/OMAR" )
                     ),
                     "ZICO": RegionList(
                         # See 0xfc1f4544 ZicoKick()
-                        ByteMappedRegion( src=0xfec07610, dst=0x82000000, size=   0x10f8c8 ),
-                        ByteMappedRegion( src=0xfec02b68, dst=0xbff00000, size=     0x4aa0 ),
-                        ByteMappedRegion( src=0xfebfb1e8, dst=0xbff20000, size=     0x7978 )
+                        ByteMappedRegion( src=0xfec07610, dst=0x82000000, size=   0x10f8c8, module="Blobs/ZICO"  ),
+                        ByteMappedRegion( src=0xfec02b68, dst=0xbff00000, size=     0x4aa0, module="Blobs/ZICO"  ),
+                        ByteMappedRegion( src=0xfebfb1e8, dst=0xbff20000, size=     0x7978, module="Blobs/ZICO"  )
                     )
                 },
                 overlays = {
                     "boot1": RegionList(
                         # RAM code for the 1st stage bootloader
-                        ByteMappedRegion( src=0xfe020000, dst=       0x0, size=       0x40, acl="rwx-", name="reset_vector", overlay=True, clear=False),
-                        ByteMappedRegion( src=0xfe026450, dst=0x40100000, size=     0xe500, acl="rwx-", name="FROMUTIL", overlay=True)
+                        ByteMappedRegion( src=0xfe020000, dst=       0x0, size=       0x40, acl="rwx-", module="Bootloader", name="reset_vector", overlay=True, clear=False),
+                        ByteMappedRegion( src=0xfe026450, dst=0x40100000, size=     0xe500, acl="rwx-", module="Bootloader", name="FROMUTIL", overlay=True)
                     )
                 }
             )

@@ -1,5 +1,4 @@
 # Initializes project memory map
-# @category MagicLantern
 
 from mlLib.toolbox import *
 from mlLib.MemTable import *

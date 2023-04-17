@@ -42,9 +42,9 @@ class MemTable(object):
                 desc += " <- {}".format(e.file)
                 desc += " +0x{:08x}".format(e.offset)
             isOverlay = "o" if e.overlay else " "
-            buf += "0x{:08x} - 0x{:08x} : {} : {} : {} : {} : {} : {}\n".format(
+            buf += "0x{:08x} - 0x{:08x} : {} : {} : {} : {} : {} : {} : {}\n".format(
                         e.dst, e.end, acl, isOverlay, rType.ljust(28),
-                        desc.ljust(28), e.name.ljust(30), e.comment)
+                        desc.ljust(28), e.name.ljust(25), e.module.ljust(15), e.comment)
         buf += "Total items: {}".format(len(self._table))
         buf += "\n"
 
@@ -152,6 +152,9 @@ class MemTable(object):
             if region.comment:
                 newRegion.comment = region.comment
 
+            if region.module:
+                newRegion.module = region.module
+
             # copy old ACL if not overwritten
             if region.acl:
                 newRegion.acl = region.acl
@@ -220,7 +223,7 @@ class MemTable(object):
 
         self.addRegion(region)
 
-    def clearRegion(self, region, name=""):
+    def clearRegion(self, region, name="unknown"):
         """
         Replace region with uninitialized bytes
 
@@ -236,9 +239,10 @@ class MemTable(object):
             exit(1)
 
         comment = "removed blob 0x{:08x}: {} {}".format(region.dst, name, region.name)
-        name = "{}_blob".format(self._table[result].name)
+        name = "{}_blob_0x{:08x}".format(name,region.src)
         self._makeSubregion(result, UninitializedRegion(
-            name = name, acl="----", comment = comment, dst = region.src, size=region.getSize())
+            name = name, acl="----", comment = comment, dst = region.src,
+            module=region.module, size=region.getSize())
             )
 
     def splitSubregion(self, region):
@@ -302,12 +306,13 @@ class Region(object):
     """
     Abstract memory region
     """
-    def __init__(self, dst, size, name = "", comment = "", acl = None, overlay=False):
+    def __init__(self, dst, size, name = "", comment = "", module="", acl = None, overlay=False):
         self.name = name
         self.dst = dst
         self.acl = acl
         self.comment = comment
         self.overlay = overlay
+        self.module = module
         self.setSize(size)
 
     def setSize(self, size):

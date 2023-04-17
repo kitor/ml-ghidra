@@ -2,6 +2,7 @@
 # @category MagicLantern
 
 from mlLib.MemoryMap import *
+from mlLib.ProgramTree import createProgramTree
 from mlLib.toolbox import createNewProgram, createFileBytes
 from mlLib.gui.FilesLoader import loadFiles, loadFilesError
 from mlLib.gui.FirmwareSelector import selectFirmware
@@ -27,3 +28,4 @@ for name, provider in files.items():
 
 # we need to explicitly pass new program downsteram as scripts are confused
 applyMemoryMap(memoryMap, program=newProgram)
+createProgramTree("EOS", memoryMap, program=newProgram)
