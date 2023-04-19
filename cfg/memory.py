@@ -128,16 +128,17 @@ devices = [
                     ByteMappedRegion( src=0xfe000000, dst=0xfc000000, size=      0x48, module="Bootloader", name="EarlyBoot", comment="just the code that jumps into 0xFE...")
                 ),
                 subregions = RegionList(
-                    SubRegion( dst=0xff260000, size= 0x40000, acl="r---", module="DryOS/Data", name="Ring",    comment="via RomRead_task / SaveRingToFile" ),
-                    SubRegion( dst=0xff2a0000, size= 0x40000, acl="r---", module="DryOS/Data", name="Custom",  comment="via RomRead_task / SaveCustomToFile" ),
-                    SubRegion( dst=0xff2e0000, size= 0xc0000, acl="r---", module="DryOS/Data", name="Rasen",   comment="via RomRead_task / SaveRasenToFile" ),
-                    SubRegion( dst=0xff3a0000, size= 0x60000, acl="r---", module="DryOS/Data", name="Lens",    comment="via RomRead_task / SaveLensToFile" ),
-                    SubRegion( dst=0xff400000, size= 0x20000, acl="r---", module="DryOS/Data", name="Lens2",   comment="via RomRead_task / string LENS_DATA2_ADDR" ),
-                    SubRegion( dst=0xff420000, size= 0x20000, acl="r---", module="DryOS/Data", name="CigData", comment="via startupPrepareDevelop / string CIG_DATA_ADDR" ),
-                    SubRegion( dst=0xff460000, size=0x160000, acl="r---", module="DryOS/Data", name="Fix",     comment="via RomRead_task" ),
-                    SubRegion( dst=0xff820000, size=     0x8, acl="r---", module="DryOS/Data", name="GUI",     comment="via startupPreparePlayback / after string pHeapAddressForWinSys" ),
-                    SubRegion( dst=0xfff60000, size= 0x40000, acl="r---", module="DryOS/Data", name="Debug",   comment="via ReadDebugDataFromFROM"),
-                    #SubRegion( dst=0xfffa0000, size=     0x8, acl="r---", module="DryOS/Data", name="Unknown", comment="via dcsChangeAckCBR?"),
+                    SubRegion( dst=0xff260000, size= 0x40000, acl="r---", module="DryOS/Data", name="Ring",     comment="via RomRead_task / SaveRingToFile" ),
+                    SubRegion( dst=0xff2a0000, size= 0x40000, acl="r---", module="DryOS/Data", name="Custom",   comment="via RomRead_task / SaveCustomToFile" ),
+                    SubRegion( dst=0xff2e0000, size= 0xc0000, acl="r---", module="DryOS/Data", name="Rasen",    comment="via RomRead_task / SaveRasenToFile" ),
+                    SubRegion( dst=0xff3a0000, size= 0x60000, acl="r---", module="DryOS/Data", name="Lens",     comment="via RomRead_task / SaveLensToFile" ),
+                    SubRegion( dst=0xff400000, size= 0x20000, acl="r---", module="DryOS/Data", name="Lens2",    comment="via RomRead_task / string LENS_DATA2_ADDR" ),
+                    SubRegion( dst=0xff420000, size= 0x20000, acl="r---", module="DryOS/Data", name="CigData",  comment="via startupPrepareDevelop / string CIG_DATA_ADDR" ),
+                    SubRegion( dst=0xff440000, size= 0x20000, acl="r---", module="DryOS/Data", name="Unknown1", comment="via update record +0x08, record size is 0x2A4" ),
+                    SubRegion( dst=0xff460000, size=0x160000, acl="r---", module="DryOS/Data", name="Fix",      comment="via RomRead_task" ),
+                    SubRegion( dst=0xff820000, size=0x740000, acl="r---", module="DryOS/Data", name="GUI",      comment="via startupPreparePlayback / after string pHeapAddressForWinSys. Size via update record - 0x56c7d8" ),
+                    SubRegion( dst=0xfff60000, size= 0x40000, acl="r---", module="DryOS/Data", name="Debug",    comment="via ReadDebugDataFromFROM"),
+                    #SubRegion( dst=0xfffa0000, size=     0x8, acl="r---", module="DryOS/Data", name="Unknown2", comment="via dcsChangeAckCBR?"),
                     SubRegion( dst=0xfffe0000, size= 0x20000, acl="r---", module="DryOS/Data", name="PROPAD",  comment="via PROPAD_Initialize params")
                 ),
                 blobs = {
