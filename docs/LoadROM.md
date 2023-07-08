@@ -29,4 +29,4 @@ memory map (and any errors) in scripting console.
 
 ## Syntax of `cfg/memory.py`, or "how can I contribute to a memory map?"
 
-See [Memory Map](docs/MemoryMap.md) 
+See [Memory Map](MemoryMap.md) 
