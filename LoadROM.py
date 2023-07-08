@@ -1,4 +1,4 @@
-# Creates a project for EOS ROM analysis
+# Loads EOS Roms and populates memory map
 # @category MagicLantern
 
 from mlLib.MemoryMap import *
