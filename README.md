@@ -9,7 +9,7 @@ with Canon EOS based firmwares.
 Python implementation of ROM loader. Loads ROM for selected model, and prepares
 a complete memory map based on definitions in `cfg/memory.py`
 
-For details, see [Create Project](docs/LoadROM.md)
+** For details, see [Load ROM](docs/LoadROM.md) **
 
 ## How to use?
 Add the root folder of this repository to Script manager:
