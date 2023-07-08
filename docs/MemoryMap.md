@@ -43,10 +43,10 @@ Memory area filled with `uninitialized bytes`.
 #### `RomRegion`
 Memory region that directly references a file bytes (from a ROM dump).
 
-### `ByteMappedRegion`
+#### `ByteMappedRegion`
 Memory region that contains bytes of another region already loaded into memory map (usually `RomRegion`)
 
-### `SubRegion`
+#### `SubRegion`
 Memory region that is split from existing, bigger memory region under its own name and permissions.
 
 ## How memory map is generated from config file?
