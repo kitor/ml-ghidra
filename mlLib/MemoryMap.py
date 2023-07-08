@@ -24,15 +24,7 @@ def createMemoryMap(device, fw):
 
     for e in fw.romcpy:
         fwTable.addRomcpyRegion(e)
-        fwTable.clearRegion(e, "ROMCPY")
     print("ROMCPY added")
-    print(fwTable)
-
-    # remove firmware blobs
-    for name, regions in fw.blobs.items():
-        for region in regions:
-            fwTable.clearRegion(region, name)
-    print("Blobls removed")
     print(fwTable)
 
     # Inject camera specific entries on top of a target memory table
@@ -44,6 +36,19 @@ def createMemoryMap(device, fw):
     for e in fw.subregions:
         memTable.splitSubregion(e)
     print("Subregions")
+    print(memTable)
+
+    # remove firmware blobs
+    for name, regions in fw.blobs.items():
+        for region in regions:
+            memTable.clearRegion(region, name)
+    print("Blobls removed")
+    print(memTable)
+
+    # remove ROMCPY sources
+    for e in fw.romcpy:
+        memTable.clearRegion(e, "ROMCPY")
+    print("ROMCPY sources removed")
     print(memTable)
 
     memTable.removeDummyRegions()
