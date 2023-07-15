@@ -129,7 +129,7 @@ cpus = {
             UninitializedRegion( dst=       0x0, size=    0x1000, acl="rwx-", name="CPU0 PRIV" ),
             UninitializedRegion( dst=    0x1000, size=    0x1000, acl="rwx-", name="CPU1 PRIV" ),
                     DummyRegion( dst=    0x2000, size=0x3FFFE000, acl="rwx-", name="RAM CACHED"),
-                    DummyRegion( dst=0x40000000, size=0x7F000000-0x40000000, acl="rwx-", name="RAM UNCACHED"),
+                    DummyRegion( dst=0x40000000, size=0x7F000000, acl="rwx-", name="RAM UNCACHED"),
             UninitializedRegion( dst=0xBF000000, size=0x20000000, acl="rw-v", name="MMIO area" ),
             UninitializedRegion( dst=0xDF000000, size=0x01000000, acl="rwx-", name="TCM?" ),
                     DummyRegion( dst=0xE0000000, size=0x8000000, acl="r-x-", name="ROM0"),
@@ -410,7 +410,7 @@ devices = [
        Device(
         model = "R6",
         cpu = cpus["DIGICX"],
-        memSize = 0x80000000,   # 2GB
+        memSize = 0x7F000000-0x40000000,   # 2GB (visible by ICU)
         
         #entry at sub_E0068B44+1
         
