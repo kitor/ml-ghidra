@@ -110,18 +110,18 @@ cpus = {
     "DIGICX": CPU(
         # https://wiki.magiclantern.fm/cams:r6
         # https://www.magiclantern.fm/forum/index.php?topic=24827.msg230859#msg230859
-        '''
-        00001000-00001FFF ? 00000000-00000FFF ( +0) O:NCACH I:WB,WA P:RW [ CPU0 only ]
-        00001000-00001FFF ? 00001000-00001FFF (-1000) O:NCACH I:WB,WA P:RW [ CPU1 only ]
-        00002000-3FFFFFFF ? 00001000-3FFFFFFF ( +0) O:NCACH I:WB,WA P:RW [ cacheable RAM - only the first GiB ]
-        40000000-BEFFFFFF ? 40000000-BEFFFFFF ( +0) O:NCACH I:NCACH P:RW [ uncacheable RAM - 2 GiB ]
-        BF000000-DEFFFFFF ? BF000000-DEFFFFFF ( +0) Device P:RW XN [ MMIO area ]
-        DF000000-DFFFFFFF ? DF000000-DFFFFFFF ( +0) O:NCACH I:WB,WA P:RW [ TCM? ]
-        E0000000-E7FFFFFF ? E0000000-E7FFFFFF ( +0) O:WB,WA I:WB,WA P:R [ main ROM ]
-        E8000000-EFFFFFFF ? E8000000-EFFFFFFF ( +0) Strongly-ordered P:RW XN [ ? ]
-        F0000000-F7FFFFFF ? F0000000-F7FFFFFF ( +0) O:WB,WA I:WB,WA P:R [ secondary ROM ]
-        F8000000-FFFFFFFF ? F8000000-FFFFFFFF ( +0) Strongly-ordered P:R XN [ ? ]
-        '''
+        
+        #00001000-00001FFF ? 00000000-00000FFF ( +0) O:NCACH I:WB,WA P:RW [ CPU0 only ]
+        #00001000-00001FFF ? 00001000-00001FFF (-1000) O:NCACH I:WB,WA P:RW [ CPU1 only ]
+        #00002000-3FFFFFFF ? 00001000-3FFFFFFF ( +0) O:NCACH I:WB,WA P:RW [ cacheable RAM - only the first GiB ]
+        #40000000-BEFFFFFF ? 40000000-BEFFFFFF ( +0) O:NCACH I:NCACH P:RW [ uncacheable RAM - 2 GiB ]
+        #BF000000-DEFFFFFF ? BF000000-DEFFFFFF ( +0) Device P:RW XN [ MMIO area ]
+        #DF000000-DFFFFFFF ? DF000000-DFFFFFFF ( +0) O:NCACH I:WB,WA P:RW [ TCM? ]
+        #E0000000-E7FFFFFF ? E0000000-E7FFFFFF ( +0) O:WB,WA I:WB,WA P:R [ main ROM ]
+        #E8000000-EFFFFFFF ? E8000000-EFFFFFFF ( +0) Strongly-ordered P:RW XN [ ? ]
+        #F0000000-F7FFFFFF ? F0000000-F7FFFFFF ( +0) O:WB,WA I:WB,WA P:R [ secondary ROM ]
+        #F8000000-FFFFFFFF ? F8000000-FFFFFFFF ( +0) Strongly-ordered P:R XN [ ? ]
+        
         arch = "ARM",
         lang = "ARM:LE:32:Cortex",
         compiler = "default",
@@ -129,13 +129,13 @@ cpus = {
             UninitializedRegion( dst=       0x0, size=    0x1000, acl="rwx-", name="CPU0 PRIV" ),
             UninitializedRegion( dst=    0x1000, size=    0x1000, acl="rwx-", name="CPU1 PRIV" ),
                     DummyRegion( dst=    0x2000, size=0x3FFFE000, acl="rwx-", name="RAM CACHED"),
-                    DummyRegion( dst=0x40000000, size=0x7F000000, acl="rwx-", name="RAM UNCACHED"),
+                    DummyRegion( dst=0x40000000, size=0x7F000000-0x40000000, acl="rwx-", name="RAM UNCACHED"),
             UninitializedRegion( dst=0xBF000000, size=0x20000000, acl="rw-v", name="MMIO area" ),
             UninitializedRegion( dst=0xDF000000, size=0x01000000, acl="rwx-", name="TCM?" ),
-                    DummyRegion( dst=0xE0000000, size=0x80000000, acl="r-x-", name="ROM0"),
-                    DummyRegion( dst=0xE8000000, size=0x80000000, acl="r---", name="ROM0_MIRROR"),
-                    DummyRegion( dst=0xF0000000, size=0x80000000, acl="r---", name="ROM1"),
-                    DummyRegion( dst=0xF8000000, size=0x80000000, acl="r---", name="ROM1_MIRROR")
+                    DummyRegion( dst=0xE0000000, size=0x8000000, acl="r-x-", name="ROM0"),
+                    DummyRegion( dst=0xE8000000, size=0x8000000, acl="r---", name="ROM0_MIRROR"),
+                    DummyRegion( dst=0xF0000000, size=0x8000000, acl="r---", name="ROM1"),
+                    DummyRegion( dst=0xF8000000, size=0x8000000, acl="r---", name="ROM1_MIRROR")
         )
     )
 }
@@ -389,14 +389,14 @@ devices = [
                     ),
                 },
                 overlays = {
-                '''
-                another romcpy ?
-                ROM:E001D28A 17 48                       LDR             R0, =sub_E001E000
-                ROM:E001D28C 17 49                       LDR             R1, =0xDF000900
-                ROM:E001D28E 18 4A                       LDR             R2, =0xDF003144
-                ...
-                ROM:E001D2DC A0 47                       BLX             R4               
-                '''
+                
+                #another romcpy ?
+                #ROM:E001D28A 17 48                       LDR             R0, =sub_E001E000
+                #ROM:E001D28C 17 49                       LDR             R1, =0xDF000900
+                #ROM:E001D28E 18 4A                       LDR             R2, =0xDF003144
+                
+                #ROM:E001D2DC A0 47                       BLX             R4               
+                
                     "boot1": RegionList(
                         # RAM code for the 1st stage bootloader
                         ByteMappedRegion( src=0xe00088ac, dst=0xdf000000, size=     0x100, acl="rwx-", module="Bootloader", name="vector_base", overlay=True), #E0004996
@@ -411,12 +411,11 @@ devices = [
         model = "R6",
         cpu = cpus["DIGICX"],
         memSize = 0x80000000,   # 2GB
-        '''
-        entry at sub_E0068B44+1
         
-        0xDED02000 : E-FUSES 1 and 2
-
-        '''
+        #entry at sub_E0068B44+1
+        
+        #0xDED02000 : E-FUSES 1 and 2
+        
         firmwares = [
             Firmware(
                 version = "1.8.2_5.3.7", #Apr 19 2023 08:50:16
@@ -427,7 +426,7 @@ devices = [
                                 
                 romcpy = RegionList(
                     ByteMappedRegion( src=0xE1FBE740, dst=    0x4000, size=   0x3F9DC-0x4000, module="DryOS", name="kernel?"), #E010002C
-                    ByteMappedRegion( src=0xE1FFA11C, dst= 0x0x3F9DC, size=   0xFA5D4-0x3F9DC, module="DryOS", name="ram_code2"), #E0100040. zeroed: 0xFA5D4 -> 0x18F894
+                    ByteMappedRegion( src=0xE1FFA11C, dst=   0x3F9DC, size=   0xFA5D4-0x3F9DC, module="DryOS", name="ram_code2"), #E0100040. zeroed: 0xFA5D4 -> 0x18F894
                     ByteMappedRegion( src=0xE0000000, dst=0xDFFC0000, size=   0x4900, module="DryOS", name="TranslationTable"), #see E0068BE8
                     #0xDFFC4A00 see below
                     #0xDFFC4B00
@@ -482,27 +481,27 @@ devices = [
                         ByteMappedRegion( src=0xE1A39200, dst=0xbff20000, size=    0x7538, module="Blobs/ZICO"  )
                     ),
                     # table at ROM:E0AD1ED8 with 2 32bits entries [ num, dest, source, addr of size ] num =0 for end of table
-                    "LIME": RegionList( []
+                    "LIME": RegionList( 
 
                     ),
-                    "SITTER": RegionList( []
+                    "SITTER": RegionList( 
 
                     ),
-                    "ARIMA": RegionList( []
+                    "ARIMA": RegionList( 
 
                     ),
-                    "SHIRAHAMA": RegionList( []
+                    "SHIRAHAMA": RegionList( 
 
                     ),
                 },
                 overlays = {
-                '''
-                ROM:E02FE2E0 : exception vector
-                0x18F89B : Error exception stack start (PU0)
-                0xDFFC5000 : IRQ exception stack start (PU0)
-                0xDFFC6000 : IRQ exception stack end (PU0) / IRQ exception stack start (PU1)
-                0xDFFC7000 : IRQ exception stack end (PU1)
-                '''
+                
+                #ROM:E02FE2E0 : exception vector
+                #0x18F89B : Error exception stack start (PU0)
+                #0xDFFC5000 : IRQ exception stack start (PU0)
+                #0xDFFC6000 : IRQ exception stack end (PU0) / IRQ exception stack start (PU1)
+                #0xDFFC7000 : IRQ exception stack end (PU1)
+                
                     "boot1": RegionList(
                         # RAM code for the 1st stage bootloader
  
