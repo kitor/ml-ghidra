@@ -375,6 +375,10 @@ class RegionList(object):
         self._list = []
 
         for region in regions:
+            if not isinstance(region, Region):
+                print("Attempted to add a non Region data type to RegionList:")
+                pprint(region)
+                exit(1)
             self._list.append(region)
 
     def __iter__(self):
