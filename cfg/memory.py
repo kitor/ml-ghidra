@@ -366,5 +366,91 @@ devices = [
                 }
             )
         ]
+    ),
+    Device(
+        model = "G7X_III",
+        cpu = cpus["DIGIC8"],
+        memSize = 0x40000000,   # 2GB
+        firmwares = [
+            Firmware(
+                version = "1.3.2_4.0.0",
+                roms = RegionList(
+                    RomRegion( name="ROM0", file="ROM0", dst=0xE0000000, size=0x2000000, module="DryOS" ),     # 32MB
+                ),
+                romcpy = RegionList(
+                    ByteMappedRegion( src=0xe105a50c, dst=    0x4000, size=   0x25738, module="DryOS", name="ram_code1"),
+                    ByteMappedRegion( src=0xe107fc44, dst= 0x223b000, size=  0x10DBCC, module="DryOS", name="ram_code2"),
+                    ByteMappedRegion( src=0xe118d810, dst=0xdf002800, size=     0xB94, module="DryOS", name="TCM")
+                ),
+                subregions = RegionList(
+                    # Most of evprocs are registered in e00bf9b8() late in _init_task_2()
+                    SubRegion( dst=0xe0000000,   size=0x40000, acl="rwx-", module="Bootloader", name="boot1",      comment="Bootloader" ),
+                    SubRegion( dst=0xe0040000, size=0x1230000, acl="rwx-", module="DryOS",      name="DryOS_code", comment="via CheckSumOfProgramArea" ),
+                    SubRegion( dst=0xe1270000, size=  0x20000, acl="r---", module="DryOS/Data", name="Custom",     comment="via SaveCustomToFile" ),
+                    SubRegion( dst=0xe1290000, size= 0x5e0000, acl="r---", module="DryOS/Data", name="GUI",        comment="via CheckSumOfGUIResource"),
+                    # 0xe1870000 TAGS01_A? there's e03a595e() which returns this address, no xrefs from any functions. Followed by TAGS02_A and TAGS03_A
+                    SubRegion( dst=0xe1870000, size=  0x40B00, acl="r---", module="DryOS/Data", name="TAGS01_A",   comment="via header string"),
+                    SubRegion( dst=0xe18b0b00, size=  0x3C900, acl="r---", module="DryOS/Data", name="TAGS01_A",   comment="via header string"),
+                    SubRegion( dst=0xe18ed400, size=  0xA2C00, acl="r---", module="DryOS/Data", name="TAGS01_A",   comment="via header string"),
+                    # end of unknown region
+                    #SubRegion( dst=0xe1970000, size=  0x20000, acl="r---", module="DryOS/Data", name="Ring",       comment="via SaveRingToFile" ),
+                    SubRegion( dst=0xe1990000, size=  0x60000, acl="r---", module="DryOS/Data", name="Rasen",      comment="via SaveRasenToFile" ),
+                    SubRegion( dst=0xe19f0000, size= 0x180000, acl="r---", module="DryOS/Data", name="Fix",        comment="via SaveFixToFile" ),
+                    SubRegion( dst=0xe1b70000, size=  0xa0000, acl="r---", module="DryOS/Data", name="Camif",      comment="via SaveCamifToFile" ),
+                    SubRegion( dst=0xe1c10000, size=  0x10000, acl="r---", module="DryOS/Data", name="CigData",    comment="via fn with string CIG_DATA_ADDR" ),
+                    SubRegion( dst=0xe1c20000, size=  0x30000, acl="r---", module="DryOS/Data", name="Debug1",     comment="via SaveDebug1ToFileROM" ),
+                    SubRegion( dst=0xe1c50000, size=  0x30000, acl="r---", module="DryOS/Data", name="Debug2",     comment="via SaveDebug2ToFileROM" ),
+                    # 0xe1c80000 - seems empty, 0xFF all the way
+                    SubRegion( dst=0xe1ca0000, size= 0x1a0000, acl="r---", module="DryOS/Data", name="Tune",       comment="via SaveTuneToFile" ),
+                    SubRegion( dst=0xe1e40000, size= 0x1a0000, acl="r---", module="DryOS/Data", name="Tune3",      comment="via SaveTune2ToFile" ),
+                    SubRegion( dst=0xe1fe0000, size=  0x10000, acl="r---", module="DryOS/Data", name="Tune4",      comment="via SaveTune4ToFile" ),
+                    # e1ff0000 - seems unused, no xrefs, 0xFF all the way
+                    # e1ff8000 - bootflags
+                    # e1ff9000 - WRITEADJUSTMENTDATATOFROM
+                    # e1ffa000 - starts with version from FACT_ICUVersionCheck
+                    # e1ffb000 - xref'd in FROMUTIL, AA55AA55 signature
+                    # e1ffb100, size = 0x140 - DRAM Param settings
+                    # e1ffb240 - seems unused, no xrefs, 0xFF all the way
+                    SubRegion( dst=0xe1ffc000, size=   0x2000, acl="r---", module="DryOS/Data", name="Service",    comment="via SaveServiceToFile" ),
+                    SubRegion( dst=0xe1ffe000, size=   0x2000, acl="r---", module="DryOS/Data", name="Error",      comment="via SaveErrorToFile" )
+                ),
+                blobs = {
+                    "ZICO": RegionList(
+                        # See e00c66ee, calls ZicoKick(). Xtensa blobs.
+                        ByteMappedRegion( src=0xe0de2960, dst=0x80000000, size=   0xe8c68, module="Blobs/ZICO"  ),
+                        ByteMappedRegion( src=0xe0ddc7d8, dst=0xbff00000, size=    0x6180, module="Blobs/ZICO"  ),
+                        ByteMappedRegion( src=0xe0dd4498, dst=0xbff20000, size=    0x8338, module="Blobs/ZICO"  )
+                    ),
+                    "LIME": RegionList(
+                        # See e07d5f8c, via 'Async LimeLoader' string, LimeKick.c. Xtensa blobs.
+                        ByteMappedRegion( src=0xe0b0bfe0, dst= 0x1800000, size=  0x1a89f8, module="Blobs/LIME"  ),
+                        ByteMappedRegion( src=0xe0cb49dc, dst= 0x1bc0000, size=  0x114230, module="Blobs/LIME"  )
+                    ),
+                    "SITTER": RegionList(
+                        # See e03613ae, called from SitterInit. Xtensa blobs.
+                        # I don't see destination in the code. We remove blob anyway.
+                        ByteMappedRegion( src=0xe0ecdcfc, dst=       0x0, size=   0x45cc0, module="Blobs/SITTER"  )
+                    ),
+                    "ARIMA": RegionList(
+                        # via e0006924() CamIF_initialize(). Xtensa blobs.
+                        ByteMappedRegion( src=0xe1b701c0, dst=0x821a1000, size=    0x8690, module="Blobs/ARIMA"  ),
+                        ByteMappedRegion( src=0xe1b70030, dst=0xbf800000, size=     0x190, module="Blobs/ARIMA"  )
+                    ),
+                    "SHIRAHAMA": RegionList(
+                        # via e0006924() CamIF_initialize(). Xtensa blobs.
+                        ByteMappedRegion( src=0xe1b789d8, dst=0x8220d000, size=   0x137d8, module="Blobs/SHIRAHAMA"  ),
+                        ByteMappedRegion( src=0xe1b78850, dst=0xbf800400, size=     0x188, module="Blobs/SHIRAHAMA"  )
+                    ),
+                },
+                overlays = {
+                    "boot1": RegionList(
+                        # RAM code for the 1st stage bootloader
+                        ByteMappedRegion( src=0xe00091a0, dst=0xdf000000, size=     0x100, acl="rwx-", module="Bootloader", name="boot1_exception_stack", overlay=True),
+                        ByteMappedRegion( src=0xe0008bb8, dst=0xdf001000, size=     0x5E8, acl="rwx-", module="Bootloader", name="boot1_0xdf001000", overlay=True),
+                        ByteMappedRegion( src=0xe00092bc, dst=0x40100000, size=   0x12524, acl="rwx-", module="Bootloader", name="FROMUTIL", overlay=True)
+                    )
+                }
+            )
+        ]
     )
 ]
