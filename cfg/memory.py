@@ -1,6 +1,24 @@
 from mlLib.MemTable import *
 
 cpus = {
+    "DIGIC5": CPU(
+        # https://foss.heptapod.net/magic-lantern/magic-lantern/-/blob/branch/qemu/contrib/qemu/eos/model_list.c#L257
+        # Cameras may have ROM0, will have ROM1 at 0xF8000000.
+        # Roms are mirrored with + 0x100000 increments (0xF9.. 0xFF...)
+        # Code executes from 0xFF... so not to make things harder only this address is loaded to Ghidra
+        arch = "ARM",
+        lang = "ARM:LE:32:v5",
+        compiler = "default",
+        regions = RegionList(
+            UninitializedRegion( dst=       0x0, size=    0x1000, acl="rwx-", name="ATCM"),
+                    DummyRegion( dst=    0x1000, size=0x3FFFF000, acl="rwx-", name="RAM CACHED"),
+                    DummyRegion( dst=0x40000000, size=0x40000000, acl="rwx-", name="RAM UNCACHED"),
+            UninitializedRegion( dst=0xC0000000, size=0x20000000, acl="rw-v", name="MMIO"),
+                    DummyRegion( dst=0xF0000000, size= 0x1000000, acl="r---", name="ROM0"),
+                    DummyRegion( dst=0xF8000000, size= 0x1000000, acl="r-x-", name="ROM1_MIRROR"),
+                    DummyRegion( dst=0xFF000000, size= 0x1000000, acl="r-x-", name="ROM1")
+        )
+    ),
     "DIGIC6": CPU(
         # https://magiclantern.fandom.com/wiki/Memory_map
         #
@@ -111,6 +129,54 @@ cpus = {
 
 
 devices = [
+    Device(
+        model = "70D",
+        cpu = cpus["DIGIC5"],
+        memSize = 0x20000000,   # 512MB
+        firmwares = [
+            Firmware(
+                version = "1.1.2",
+                roms = RegionList(
+                    RomRegion( name="ROM0", file="ROM0", dst=0xf0000000, size=0x1000000, module="DryOS/Data" ),  # 16MB
+                    RomRegion( name="ROM1", file="ROM1", dst=0xff000000, size=0x1000000, module="DryOS" )   # 16MB
+                ),
+                romcpy = RegionList(
+                    ByteMappedRegion( src=0xff0c0da0, dst=       0x0, size=      0x38, module="DryOS",      name="ATCM1"),
+                    ByteMappedRegion( src=0xff0c0dd8, dst=     0x4B0, size=     0x1E8, module="DryOS",      name="ATCM2"),
+                    ByteMappedRegion( src=0xffd4ce18, dst=    0x1900, size=   0xAD5C4, module="DryOS",      name="Code"),
+                    ByteMappedRegion( src=0xff0c0000, dst=0xf80c0000, size=     0x100, module="Bootloader",  name="EarlyBoot", clear=False, comment="just the code that jumps into 0xF")
+                ),
+                subregions = RegionList(
+                    # Tune, TuneForSlave - properties? List is likely incomplete
+                    SubRegion( dst=0xf0020000, size= 0x40000, acl="r---", module="DryOS/Data", name="Custom",     comment="via SaveCustomToFile" ),
+                    SubRegion( dst=0xf0060000, size= 0x60000, acl="r---", module="DryOS/Data", name="Rasen",      comment="via SaveRasenToFile" ),
+                    SubRegion( dst=0xf00c0000, size=0x100000, acl="r---", module="DryOS/Data", name="Fix",        comment="via SaveFixToFile" ),
+                    # 0xf01e0000, 0x20000?
+                    SubRegion( dst=0xf01e0000, size= 0x60000, acl="r---", module="DryOS/Data", name="Lens",       comment="via SaveLensToFile" ),
+
+                    SubRegion( dst=0xf0700000, size= 0x20000, acl="r---", module="DryOS/Data", name="PROPAD",     comment="via PROPAD_Initialize params"),
+                    SubRegion( dst=0xf0740000, size= 0x20000, acl="r---", module="DryOS/Data", name="CigData",    comment="via startupPrepareDevelop / string CIG_DATA_ADDR" ),
+                    SubRegion( dst=0xf07a0000, size= 0x40000, acl="r---", module="DryOS/Data", name="Debug",      comment="via ReadDebugDataFromFROM"),
+                    # Stuff from 0xF8000000 region moved to 0xFF000000
+                    SubRegion( dst=0xff080000, size= 0x40000, acl="r---", module="DryOS/Data", name="Ring",       comment="via SaveRingToFile" ),
+                    SubRegion( dst=0xff0c0000, size=0xe80000, acl="rwx-", module="DryOS",      name="DryOS_code", comment="via CheckSumOfProgramArea" )
+                ),
+                blobs = {
+                    "EEKO": RegionList(
+                        # Via xrefs to ff41aea4 EekoBltDmac(). ARM Thumb2 blobs. Destination locations unknown.
+                        ByteMappedRegion( src=0xffc6c6a4, dst=        0x0, size=    0x6e94, module="Blobs/EEKO", comment="via ff5c7998()" ), #0xd0288000
+                        ByteMappedRegion( src=0xffc73538, dst=        0x0, size=     0x1c0, module="Blobs/EEKO", comment="via ff5c79fc()" ), #0xd0280000
+                        ByteMappedRegion( src=0xffc736f8, dst=        0x0, size=    0x1db8, module="Blobs/EEKO", comment="via ff5c79fc()" )  #0x01ec0000
+                    ),
+                },
+                overlays = {
+                    "boot1": RegionList(
+                        ByteMappedRegion( src=0xfffe0000, dst=  0x100000, size=     0xFFDC, acl="rwx-", module="Bootloader", name="FROMUTIL", overlay=True)
+                    )
+                }
+            ),
+        ]
+    ),
     Device(
         model = "80D",
         cpu = cpus["DIGIC6"],
