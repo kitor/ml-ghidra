@@ -159,7 +159,7 @@ devices = [
                     SubRegion( dst=0xf07a0000, size= 0x40000, acl="r---", module="DryOS/Data", name="Debug",      comment="via ReadDebugDataFromFROM"),
                     # Stuff from 0xF8000000 region moved to 0xFF000000
                     SubRegion( dst=0xff080000, size= 0x40000, acl="r---", module="DryOS/Data", name="Ring",       comment="via SaveRingToFile" ),
-                    SubRegion( dst=0xff0c0000, size=0xe80000, acl="rwx-", module="DryOS",      name="DryOS_code", comment="via CheckSumOfProgramArea" )
+                    SubRegion( dst=0xff0c0000, size=0xe80000, acl="r-x-", module="DryOS",      name="DryOS_code", comment="via CheckSumOfProgramArea" )
                 ),
                 blobs = {
                     "EEKO": RegionList(
