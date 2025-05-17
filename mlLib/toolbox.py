@@ -1,6 +1,4 @@
 
-
-
 def stringToAddress(addr, program = None):
     """
     Create Ghidra address object from string containing address
@@ -46,6 +44,10 @@ def getFileProvider(path, name):
 
 def createFileBytes(name, provider, program=None):
     from __main__ import monitor
+
+    if program is None:
+        from __main__ import currentProgram
+        program = currentProgram
     f = provider.getFile()
     bytes = program.getMemory().createFileBytes(name, 0, f.length(), provider.getInputStream(0), monitor)
     print("created new bytes {}".format(name))
@@ -67,3 +69,58 @@ def getFileBytes(name, program = None):
             return e
 
     return False
+
+def convToBytes(addr, len=4):
+    """
+    Ghidra getBytes, but returns actual unsigned bytes instead of signed representations
+
+    :param addr: Valid adress object of in-memory string
+    :param len:  Buffer len to read.
+    :return:     Map with read bytes
+    """
+    from __main__ import getBytes
+    return map(lambda b: b & 0xff, getBytes(addr,len))
+
+
+def getPtrFromMemory(addr):
+    """
+    Decode 32 bit LE value from a memory space into a string representation
+
+    TODO: Shall this be left as a string? Makes it easy to use stringToAddress
+          for decoding pointers, and avoiding nonsense with lack of unsinged 
+          values in Python
+
+    :param addr: Valid adress object of in-memory string
+    :return:     String representation of a value, encoded as base 16
+    """
+    data = convToBytes(addr,4)
+    val = data[0] + (data[1] << 8) + (data[2] << 16) + (data[3] << 24)
+    return hex(val).rstrip("L")
+
+
+def getStringFromMemory(addr, len=0x64):
+    """
+    Naive cstring string decoder
+
+    :param addr: Valid adress object of in-memory string
+    :param len:  Maximum buffer len to decode.
+    :return:     Decoded string
+    """
+    msg = bytearray(convToBytes(addr, len))
+    result = ""
+    try:
+        return msg.decode().split('\x00')[0]
+    except UnicodeDecodeError as e:
+        return msg.decode(errors="ignore").split('\x00')[0]
+
+def getDataTypeByName(name, program = None):
+    if program is None:
+        from __main__ import currentProgram
+        program = currentProgram
+
+    r = []
+    dtm = program.getDataTypeManager()
+    dtm.findDataTypes(name, r)
+    if len(r) == 0:
+        print("Datatype not found: '{}'", name);
+    return r[0]
