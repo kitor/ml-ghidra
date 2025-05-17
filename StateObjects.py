@@ -19,19 +19,16 @@ def getStateChangeFunctions(ptr, inputs, states):
     :return: List of Ghidra address objects.
     """
     results = []
-    curAddr = ptr.subtract(4) # just more convinient 
+    curAddr = ptr.subtract(4) # just more convinient
     for i in range(0, inputs*states):
        curAddr = curAddr.add(8)
-       ptr = getPtrFromMemory(curAddr)  
-       fn = stringToAddress(ptr)
-       # save only unique addresses
-       if (ptr != "0x0") and not fn in results:
+       fn = stringToAddress(getPtrFromMemory(curAddr))
+       # Save only unique, valid addresses. 0 is considered invalid.
+       if (fn.getOffset() > 0) and not fn in results:
            results.append(fn)
+
     return results
 
-
-def stringToAddress(addr):
-    return getCurrentProgram().getAddressFactory().getDefaultAddressSpace().getAddress(addr)
 
 def setStateChangeFnSignatures(inputs, prefix = None, namespace = None,
             datatype = None, argName = None):
@@ -54,8 +51,7 @@ def setStateChangeFnSignatures(inputs, prefix = None, namespace = None,
         dt = getDataTypeByName(datatype)
 
     for p in inputs:
-        print(p)
-        if int(p.toString(), 16) & 0x1:
+        if p.getOffset() & 0x1:
             # get rid of thumb bit
             p = p.subtract(1)
 
@@ -100,4 +96,3 @@ def setStateChangeFnSignatures(inputs, prefix = None, namespace = None,
 
 fns = getStateChangeFunctions(stringToAddress("0xe0a7e6c4"), 21, 10)
 setStateChangeFnSignatures(fns, "EVF", "EvfState", "EvfClass *", "pObj")
-
