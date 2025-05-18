@@ -1,3 +1,4 @@
+from __main__ import *
 
 def stringToAddress(addr, program = None):
     """
@@ -113,14 +114,20 @@ def getStringFromMemory(addr, len=0x64):
     except UnicodeDecodeError as e:
         return msg.decode(errors="ignore").split('\x00')[0]
 
-def getDataTypeByName(name, program = None):
-    if program is None:
-        from __main__ import currentProgram
-        program = currentProgram
+# Methods to get unsigned data variants borrowed from
+# https://github.com/NationalSecurityAgency/ghidra/issues/1969#issuecomment-1221655969
+def getUByte(addr):
+    return getByte(addr) & 0xFF
 
-    r = []
-    dtm = program.getDataTypeManager()
-    dtm.findDataTypes(name, r)
-    if len(r) == 0:
-        print("Datatype not found: '{}'", name);
-    return r[0]
+def getUShort(addr):
+    return getShort(addr) & 0xFFFF
+
+def getUInt(addr):
+    return getInt(addr) & 0xFFFFFFFF
+
+def getULong(addr):
+    return getLong(addr) & 0xFFFFFFFFFFFFFFFF
+
+# Thanks @reyalp
+def getPointerAddr(addr):
+    return toAddr(getUInt(addr))
