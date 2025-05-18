@@ -79,6 +79,7 @@ def setStateChangeFnSignatures(pointers, prefix = None, oldPrefix = None,
 
     :param pointers:  List of Ghidra Address objects to functions
     :param prefix:    String with prefix to prepend function names with (opt.)
+    :param oldPrefix: String with prefix to cut from function name (opt.)
     :param namespace: Parent namespace to assign to function (opt.)
     :param datatype:  Data type to assign to a function (opt.)
     :param argName:   Name to update arg1 name with (opt., only if datatype set)
