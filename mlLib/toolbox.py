@@ -114,6 +114,14 @@ def getStringFromMemory(addr, len=0x64):
     except UnicodeDecodeError as e:
         return msg.decode(errors="ignore").split('\x00')[0]
 
+def getFirstDataType(name):
+    dtm = getCurrentProgram().getDataTypeManager()
+    r = []
+    dtm.findDataTypes(name, r)
+    if len(r) == 0:
+        return None
+    return r[0]
+
 # Methods to get unsigned data variants borrowed from
 # https://github.com/NationalSecurityAgency/ghidra/issues/1969#issuecomment-1221655969
 def getUByte(addr):
