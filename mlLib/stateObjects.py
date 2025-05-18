@@ -184,6 +184,29 @@ def setStateChangeFnSignatures(pointers, prefix = None, oldPrefix = None,
 from ghidra.app.util.XReferenceUtils import getAllXrefs
 from ghidra.program.util import ProgramLocation
 
+def getStateObjectArgs(addr):
+    if not getFunctionContaining(addr):
+        print(addr.toString() + ": === Unable to find a defined function, skippinig ===")
+        return None
+
+    args = decodeCallArgs(addr)
+    if len(args) != 5 or args[2] is None or args[3] is None or args[4] is None:
+        print(addr.toString() + ": === decode args failed, skippinig ===")
+        return None
+
+    if args[0]:
+        name = getStringFromMemory(toAddr(args[0]))
+    else:
+        # use "default name" where name is unknown
+        name = "StateObj_" + addr.toString()
+
+    struct = toAddr(args[2])
+    inputs = args[3]
+    states = args[4]
+
+    print(" ".join([addr.toString(), name, struct.toString(), str(inputs), str(states)]))
+    return([name, struct, inputs, states])
+
 def getStateObjects(addr):
     """
     Parse xrefs to CreateStateObject and return list of call params
@@ -195,26 +218,8 @@ def getStateObjects(addr):
 
     results = []
     for xref in xrefs:
-
         addr = xref.getFromAddress()
-        if not getFunctionContaining(addr):
-            print(addr.toString() + ": === Unable to find a defined function, skippinig ===")
-            continue
-
-        args = decodeCallArgs(addr)
-        if len(args) != 5 or args[2] is None or args[3] is None or args[4] is None:
-            print(addr.toString() + ": === decode args failed, skippinig ===")
-            continue
-
-        if args[0]:
-            name = getStringFromMemory(toAddr(args[0]))
-        else:
-            # use "default name" where name is unknown
-            name = "StateObj_" + addr.toString()
-
-        struct = toAddr(args[2])
-        inputs = args[3]
-        states = args[4]
-        results.append([name, struct, inputs, states])
-        print(" ".join([addr.toString(), name, struct.toString(), str(inputs), str(states)]))
+        result = getStateObjectArgs(addr)
+        if result:
+            results.append(result)
     return results
