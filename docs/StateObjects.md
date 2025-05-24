@@ -18,7 +18,7 @@ prefixes, namespaces and setting function calls arg1 to a proper data type.
 ## Prerequisites
 
 You have to find and create `CreateStateObject` function first. It has to
-have properly-ish declared arguments. For example:
+have properly-ish declared signature. For example:
 
 ```
 StateObject *
@@ -91,6 +91,7 @@ A window will pop up, allowing you to set following parameters:
 
 `Arg1` handling is useful since all StateObject operate using `TaskClass` task.
 Every function executed receive pointer to a data structure at argument 1.
+This will propagate data types down through the state object function chain.
 
 While going on into details of `TaskClass` is beyond scope of this document;
 in most cases you will find a data structure created just before
