@@ -11,6 +11,15 @@ a complete memory map based on definitions in `cfg/memory.py`
 
 **For details, see [Load ROM](docs/LoadROM.md)**
 
+### `StateObjects.py` and `StateObjectOneShot.py`
+Decode and define data structures from CreateStateObject calls.
+Create functions where autoanalysis missed them, optionally - change name
+prefixes, set function arg1 to proper name / type and assign function to
+a namespace.
+
+**For details, see [State Objects](docs/StateObjects.md)**
+
+
 ## How to use?
 Add the root folder of this repository to Script manager:
 1. Open CodeBrowser tool.

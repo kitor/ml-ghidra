@@ -1,10 +1,9 @@
-# Populates all StateObject state change functions and details
+# Populates all StateObject state change functions and detailsgetEntryPoint()
 # @category MagicLantern
 
 from mlLib.stateObjects import *
 
-CreateStateObjectAddress = toAddr(0x0003d970)
-
+CreateStateObjectAddress = getFunctionContaining(currentAddress).getEntryPoint()
 StateObjectEntryType = CreateStateObjectEntryDataType()
 results = getStateObjects(CreateStateObjectAddress)
 
