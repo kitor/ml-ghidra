@@ -149,18 +149,19 @@ def setStateChangeFnSignatures(pointers, prefix = None, oldPrefix = None,
 
         # Set function name prefix
         oldName = fn.getName()
+
         if prefix and not oldName.startswith(prefix):
             if oldName.startswith("FUN_"):
                 oldName = oldName[4:]
-            elif oldPrefix and oldName.startswith(oldPrefix + "_"):
-                oldName = oldName[len(oldPrefix)+1:]
+            elif oldPrefix and oldName.startswith(oldPrefix):
+                oldName = oldName[len(oldPrefix):]
 
-            if oldName.startswith(prefix + "_"):
+            if oldName.startswith(prefix):
                 # make sure not to get double prefix
                 print(oldName + ": Renamed from " + fn.getName())
                 fn.setName(oldName, SourceType.USER_DEFINED)
             else:
-                newName = prefix + "_" + oldName
+                newName = prefix + oldName
                 print(newName + ": Renamed from " + fn.getName())
                 fn.setName(newName, SourceType.USER_DEFINED)
 

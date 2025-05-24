@@ -22,7 +22,7 @@ class StateObjectDialog(DialogComponentProvider):
     def __init__(self, name, addr, states, inputs):
         self._success = False
 
-        self.prefix = JTextField(name)
+        self.prefix = JTextField(name + "_")
         self.oldPrefix = JTextField("")
 
         #self.nsname = JLabel("not set")
@@ -140,6 +140,11 @@ if not dialog.getStatus():
 
 prefix, oldPrefix, nsname, dataType, argName = dialog.getUserInputs()
 
+namespace = None
+nsname = getNamespacesByName(currentProgram, None, nsname)
+if len(nsname):
+    namespace = nsname[0]
+
 StateObjectEntryType = CreateStateObjectEntryDataType()
 
 pointers = getStateChangeFunctions(
@@ -153,7 +158,7 @@ setStateChangeFnSignatures(
         pointers = pointers,
         prefix = prefix,
         oldPrefix = oldPrefix,
-        namespace = getNamespacesByName(currentProgram, None, nsname)[0],
+        namespace = namespace,
         datatype = dataType,
         argName = argName )
 

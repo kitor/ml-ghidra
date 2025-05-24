@@ -9,6 +9,7 @@ results = getStateObjects(CreateStateObjectAddress)
 
 for entry in results:
     name, struct, inputs, states = entry
+    prefix = name + "_"
     print("processing " + name)
     setStateObjectConfigDataType(StateObjectEntryType, struct, inputs, states)
 
@@ -19,4 +20,4 @@ for entry in results:
 
     setStateChangeFnSignatures(
             pointers = pointers,
-            prefix = name)
+            prefix = prefix )

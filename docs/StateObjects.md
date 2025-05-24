@@ -1,9 +1,10 @@
 # `StateObjects.py` and `StateObjectOneShot.py`
 
 Decode and define data structures from CreateStateObject calls.
-Create functions where autoanalysis missed them, optionally - change name
-prefixes, set function arg1 to proper name / type and assign function to
-a namespace.
+Create functions where autoanalysis missed them.
+
+Optionally - change name prefixes, set function arg1 to proper name / type and
+assign functions to a namespace.
 
 ## How to use?
 
@@ -70,7 +71,7 @@ once for each thunk to discover more state objects.**
 The proposed `StateObjectOneShot.py` use is by assigning it to a hot key, but
 can be executed from Script Manager as well.
 
-First find a `CreateStateObject` function **call**, for example:
+First, find a `CreateStateObject` function **call**. For example:
 
 ```
 # In decompiler:
@@ -83,8 +84,8 @@ When call is highlighted, press assigned hotkey or execute script from Script Ma
 
 A window will pop up, allowing you to set following parameters:
 * Function prefix (defaults to state object name)
-* Old prefix (opt., if you changed default `FUN_` name prefix earlier, it will substitute it too)
-* Namespace (opt., enter name of *existing* namespace you want to assign functions too)
+* Old prefix (opt., to be substituted instead of default `FUN_` prefix, eg. if you may have changed it earlier)
+* Namespace (opt., enter name of *existing* namespace you want to assign functions to)
 * Arg1 data type (opt., will replace 1st arg data type with selected one)
 * Arg1 name (opt., works only with Arg1 datat type - rename arg1 to following string)
 
@@ -93,7 +94,9 @@ Every function executed receive pointer to a data structure at argument 1.
 
 While going on into details of `TaskClass` is beyond scope of this document;
 in most cases you will find a data structure created just before
-`CreateStateObject` call, where result of such call is saved to some early field
-of this structure. This is very likely the data structure that also gets passed
-into Arg1 of state change functions.
+`CreateStateObject` call.
+
+Result of such call is saved to some early field of this structure.
+The structure is very likely the data structure that also gets passed into Arg1
+of state change function calls.
 
