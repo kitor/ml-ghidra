@@ -41,6 +41,19 @@ functionality from right-click menu in Decompile window.
 Running either of scripts will auto-create `StateObjEntry` and `StateObjEntry *`
 data types if those are missing.
 
+## Limitiations
+
+At the time of writing, scripts will fail to create new functions in some
+conditions, eg. when at function address there's already something (wrongly)
+defined as a data type.
+
+There are also cases (examples being `DisplayStateWithImgMute` and `DisplayState`
+on pre-DIGIC 6 models) where multiple state objects share the same function table
+or some function calls. When running automatic state objects creation this will
+result in multiple name prefixes being applied (in order those were discovered).
+
+If you find such a case, you can quickly fix that via single shot script.
+
 ## Automatic state objects creation via `StateObjects.py`
 
 `StateObjects.py` will follow all x-refs to `CreateStateObject` in attempt
