@@ -150,7 +150,7 @@ def setStateChangeFnSignatures(pointers, prefix = None, oldPrefix = None,
         # Set function name prefix
         oldName = fn.getName()
 
-        if prefix and not oldName.startswith(prefix):
+        if (prefix and not oldName.startswith(prefix)) or oldPrefix:
             if oldName.startswith("FUN_"):
                 oldName = oldName[4:]
             elif oldPrefix and oldName.startswith(oldPrefix):
