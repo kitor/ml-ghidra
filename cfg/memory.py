@@ -565,7 +565,7 @@ devices = [
                     # ROM1
                     SubRegion( dst=0xf0010000, size= 0x2f0000, acl="r---", module="DryOS/Data", name="Tune2b",     comment="via CheckSumOfTuneData2" ),
                     # F0300000 - seems unused, no xrefs, 0xFF all the way
-                    SubRegion( dst=0xf0380000, size= 0x1b0000, acl="r---", module="DryOS/Data", name="Tune1a",     comment="via SaveTuneToFile" ),
+                    SubRegion( dst=0xf0380000, size= 0x1b0000, acl="r---", module="DryOS/Data", name="Tune1b",     comment="via SaveTuneToFile" ),
                     # F0530000 - seems unused, no xrefs, 0xFF all the way
                     SubRegion( dst=0xf05a0000, size= 0x190000, acl="r---", module="DryOS/Data", name="Fix",        comment="via CheckSumOfFixData" ),
                     SubRegion( dst=0xf0730000, size= 0x8d0000, acl="r---", module="DryOS/Data", name="GUI",        comment="via CheckSumOfGUIResource")
