@@ -88,7 +88,7 @@ def getPtrFromMemory(addr):
     Decode 32 bit LE value from a memory space into a string representation
 
     TODO: Shall this be left as a string? Makes it easy to use stringToAddress
-          for decoding pointers, and avoiding nonsense with lack of unsinged 
+          for decoding pointers, and avoiding nonsense with lack of unsigned
           values in Python
 
     :param addr: Valid adress object of in-memory string

@@ -1,146 +1,14 @@
+# Find and mark FIO stubs
+# @category MagicLantern
+
+
 from ghidra.app.decompiler import DecompileOptions
 from ghidra.app.decompiler import DecompInterface
 from ghidra.util.task import ConsoleTaskMonitor
 from ghidra.program.model.symbol.SourceType import *
 
-
-def stringToAddress(addr):
-    """
-    Create Ghidra address object from string containing address
-    
-    :param addr: String with address representation
-    :return:     Ghidra address object
-    """
-    return currentProgram.getAddressFactory().getDefaultAddressSpace().getAddress(addr)
-
-
-def convToBytes(addr, len=4):
-    """
-    Ghidra getBytes, but returns actual unsigned bytes instead of signed representations
-    
-    :param addr: Valid adress object of in-memory string
-    :param len:  Buffer len to read.
-    :return:     Map with read bytes
-    """
-    return map(lambda b: b & 0xff, getBytes(addr,len))
-
-
-def getPtrFromMemory(addr):
-    """
-    Decode 32 bit LE value from a memory space into a string representation
-
-    TODO: Shall this be left as a string? Makes it easy to use stringToAddress
-          for decoding pointers, and avoiding nonsense with lack of unsinged 
-          values in Python
-    
-    :param addr: Valid adress object of in-memory string
-    :return:     String representation of a value, encoded as base 16
-    """
-    data = convToBytes(addr,4)
-    val = data[0] + (data[1] << 8) + (data[2] << 16) + (data[3] << 24)
-    return hex(val).rstrip("L")
-
-
-def getStringFromMemory(addr, len=0x64):
-    """
-    Naive cstring string decoder
-    
-    :param addr: Valid adress object of in-memory string
-    :param len:  Maximum buffer len to decode.
-    :return:     Decoded string
-    """
-    msg = bytearray(convToBytes(addr, len))
-    result = ""
-    try:
-        return msg.decode().split('\x00')[0]
-    except UnicodeDecodeError as e:
-        return msg.decode(errors="ignore").split('\x00')[0]
-
-
-def getCallOps(addr):
-    """
-    Get operands of a function call
-    
-    Based on https://github.com/HackOvert/GhidraSnippets
-    
-    :param addr: Valid adress object with function call
-    :return:     Inputs of operand at :address:
-    """
-    options = DecompileOptions()
-    monitor = ConsoleTaskMonitor()
-    ifc = DecompInterface()
-    ifc.setOptions(options)
-    ifc.openProgram(currentProgram)
-    
-    func = getFunctionContaining(addr)
-    res = ifc.decompileFunction(func, 60, monitor)
-    high_func = res.getHighFunction()
-    pcodeops = high_func.getPcodeOps(addr)
-    op = pcodeops.next()
-    return op.getInputs()
-
-
-def uniqueToString(op):
-    """
-    Decode OperandInput from getUniqueValue into a string
-    
-    :param op: Operand to decode value from
-    :return:   String with decoded value
-    """
-    return hex(op.getOffset()).rstrip("L")
-
-
-def getUniqueValue(node):
-    """
-    Attempt to decode a value from PcodeOps
-    
-    For constant values returns a value.
-    For unique values attempts to follow the chain.
-    
-    see https://github.com/NationalSecurityAgency/ghidra/discussions/3711
-    
-    TODO: Return computed value instead of operand input objects.
-          This will become handy when properly working with PTRSUB and others.
-    
-    :param node: Single PcodeOps node to decode:
-    :return:     Operand input
-    """
-    if node.isUnique():
-        tmp = node.getDef()
-        inp = tmp.getInputs()
-        if len(inp) == 1:
-            if tmp.getMnemonic() == "CAST":
-                return getUniqueValue(inp[0])
-            else:
-                return inp[0]
-        elif len(inp) == 2 and tmp.getMnemonic() == "PTRSUB":
-            if inp[0].isConstant() and inp[1].isConstant():
-                return inp[1]
-    elif node.isConstant:
-        return node.getHigh().getScalar()
-    else:
-        return None
-
-
-def decodeCallArgs(addr, argNo):
-    """
-    Decodes arguments of CreateStateObject function call
-     
-    TODO: Return arguments instead of printing them
-
-    :param addr: Valid adress object with function call 
-    """
-    name = "N/A"
-    
-    try:
-        ops = getCallOps(addr)
-        data = getUniqueValue(ops[argNo])
-        print("Data: {}".format(data))
-    except Exception as e:
-        print("Exception: {}".format(e))
-    
-    return data
-
+from mlLib.toolbox import *
+from mlLib.decompiler import *
 
 def runFinder(refs, mnemonic, argNo):
     results = {}
@@ -151,25 +19,27 @@ def runFinder(refs, mnemonic, argNo):
         # TODO: Attempt to find thunks, and process them too?
         if ins.getMnemonicString().startswith(mnemonic):
             print ("branch at {}, {}".format(addr.toString(), ins.toString()))
-            name = decodeCallArgs(addr, argNo)
+            name = decodeCallArgs(addr)[argNo]
             if not name in results.keys():
                results[name] = []
-            
+
             results[name].append(addr)
         else:
             print ("not a branch at {}, {}".format(addr.toString(), ins.toString()))
-            
+
     return results
 
 
 def nameFunctions(calls, prefix = "", stub_names = None):
     stubs = {}
     for name, ptrs in calls.items():
+        print("namePtr: {} fns: {}".format(hex(name), ", ".join([ptr.toString() for ptr in ptrs])))
+        name = getStringFromMemory(toAddr(name))
         sources = []
         for p in ptrs:
             fn = getFunctionContaining(p)
             sources.append(fn)
-            
+
         sources = list(set(sources)) #keep unique values
         if len(sources) > 1:
             print("{}: Multiple functions found, skipping! {}".format(name, sources))
@@ -177,7 +47,7 @@ def nameFunctions(calls, prefix = "", stub_names = None):
             if not prefix or name.startswith(prefix):
                 newName = name
             else:
-                newName = "{]{}".format(prefix, name)
+                newName = "{}{}".format(prefix, name)
             func = sources[0]
             pFunc = sources[0].getEntryPoint()
             print("Rename {} as {}".format(sources[0], newName))
@@ -187,7 +57,7 @@ def nameFunctions(calls, prefix = "", stub_names = None):
                 print(" + Create a label with ML name {}".format(ml_name))
                 createLabel(pFunc, ml_name, False)
                 stubs[stub_names[name]] = (pFunc, name)
-                
+
     return stubs
 
 
@@ -235,14 +105,14 @@ FIO_ML2 = {
     "FIO_FindNextEx"      :  "FIO_FindNextEx",
     "FIO_FindClose"       :  "FIO_FindClose"
     }
-# Get all *known* xrefs to FIO_logger()
-refs = getReferencesTo(toAddr("FIO_logger"))
+# Get all *known* xrefs to DebugSTG_Printf
+refs = getReferencesTo(toAddr("DebugSTG_Printf"))
 
 # Note: This will fail if function is not yet defined
 # On fail, just go to the address and create a missing function.
 # Repeat until it won't fail.
-calls = runFinder(refs, "bl", 1)
-stubs = nameFunctions(calls, "FIO_", FIO_ML2)
+calls = runFinder(refs, "bl", 0)
+stubs = nameFunctions(calls, "FIO_", FIO_ML1)
 
 #refs = getReferencesTo(toAddr("mzrm_functable_logger"))
 #calls = runFinder(refs, "callx8", 3)
